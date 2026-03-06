@@ -49,6 +49,7 @@ export class UsersPage extends BasePage {
 	protected readonly filterSelectFieldDropdown: Locator;
 	protected readonly filterSelectOperatorDropdown: Locator;
 	protected readonly filterValueField: Locator;
+	protected readonly filterSingleDateField: Locator;
 	protected readonly filterMinDateField: Locator;
 	protected readonly filterMaxDateField: Locator;
 	protected readonly filterAddNewFilter: Locator;
@@ -113,7 +114,10 @@ export class UsersPage extends BasePage {
 		this.filterButton = this.page.getByRole("button", { name: "Filter" });
 		this.filterSelectFieldDropdown = this.filterWrapper.getByRole("combobox").first();
 		this.filterSelectOperatorDropdown = this.filterWrapper.getByRole("combobox").nth(1);
-		this.filterValueField = this.filterWrapper.getByRole("combobox").first();
+		this.filterValueField = this.filterWrapper.getByRole("textbox").first();
+		this.filterSingleDateField = this.filterWrapper.locator(
+			".w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100",
+		);
 		this.filterMinDateField = this.filterWrapper.locator('[placeholder="Min"]');
 		this.filterMaxDateField = this.filterWrapper.locator('[placeholder="Max"]');
 		this.filterAddNewFilter = this.filterWrapper.getByRole("button", { name: "Add additional filter" });
@@ -171,13 +175,36 @@ export class UsersPage extends BasePage {
 		}
 	}
 
-	private async filterSelectFiled(field: FilterSelectField) {
+	private async filterSelectField(field: FilterSelectField): Promise<void> {
 		await this.filterSelectFieldDropdown.selectOption(field);
 	}
 
-	private async filterSelectOperator(operator: FilterSelectOperator) {
+	private async filterSelectOperator(operator: FilterSelectOperator): Promise<void> {
 		await this.filterSelectOperatorDropdown.selectOption(operator);
 	}
 
-	async applyFilter(): Promise<void> {}
+	async applyFilter(
+		field: FilterSelectField,
+		operator: FilterSelectOperator,
+		value?: any,
+		singleDate?: string, // MM-DD-YYYY
+		dateMin?: string,
+		dateMax?: string,
+	): Promise<void> {
+		await this.filterSelectField(field);
+		await this.filterSelectOperator(operator);
+		if ((await this.filterValueField.isVisible()) === true) {
+			await this.filterValueField.fill(value);
+		} else if (
+			(await this.filterMinDateField.isVisible()) === true ||
+			(await this.filterMaxDateField.isVisible()) === true
+		) {
+			await this.filterMinDateField.fill(dateMin!);
+			await this.filterMaxDateField.fill(dateMax!);
+		} else if ((await this.filterSingleDateField.isVisible()) === true) {
+			await this.filterSingleDateField.fill(singleDate!);
+		} else {
+			return;
+		}
+	}
 }
