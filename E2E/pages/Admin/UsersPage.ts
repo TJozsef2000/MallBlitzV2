@@ -105,9 +105,9 @@ export class UsersPage extends BasePage {
 
 		// - Table actions -
 		this.actionsButton = this.page.getByRole("button", { name: "Actions" });
-		this.markAsVerifiedButton = this.page.locator("#headlessui-menu-item-v-1-355").getByRole("button");
-		this.markAsUnverifiedButton = this.page.locator("#headlessui-menu-item-v-1-356").getByRole("button");
-		this.deleteSelectedButton = this.page.locator("#headlessui-menu-item-v-1-357").getByRole("button");
+		this.markAsVerifiedButton = this.page.getByRole("button", { name: "Mark as Verified" });
+		this.markAsUnverifiedButton = this.page.getByRole("button", { name: "Mark as Unverified" });
+		this.deleteSelectedButton = this.page.getByRole("button", { name: "Delete Selected" });
 
 		// - Filter -
 		this.filterWrapper = this.page.locator(".w-full max-w-4xl");
@@ -176,10 +176,12 @@ export class UsersPage extends BasePage {
 	}
 
 	private async filterSelectField(field: FilterSelectField): Promise<void> {
+		await this.filterSelectFieldDropdown.click();
 		await this.filterSelectFieldDropdown.selectOption(field);
 	}
 
 	private async filterSelectOperator(operator: FilterSelectOperator): Promise<void> {
+		await this.filterSelectOperatorDropdown.click();
 		await this.filterSelectOperatorDropdown.selectOption(operator);
 	}
 
@@ -193,18 +195,23 @@ export class UsersPage extends BasePage {
 	): Promise<void> {
 		await this.filterSelectField(field);
 		await this.filterSelectOperator(operator);
-		if ((await this.filterValueField.isVisible()) === true) {
-			await this.filterValueField.fill(value);
-		} else if (
-			(await this.filterMinDateField.isVisible()) === true ||
-			(await this.filterMaxDateField.isVisible()) === true
-		) {
-			await this.filterMinDateField.fill(dateMin!);
-			await this.filterMaxDateField.fill(dateMax!);
-		} else if ((await this.filterSingleDateField.isVisible()) === true) {
-			await this.filterSingleDateField.fill(singleDate!);
-		} else {
-			return;
+		switch (true) {
+			case await this.filterValueField.isVisible():
+				await this.filterValueField.fill(value);
+				break;
+
+			case (await this.filterMinDateField.isVisible()) && (await this.filterMaxDateField.isVisible()):
+				await this.filterMinDateField.fill(dateMin!);
+				await this.filterMaxDateField.fill(dateMax!);
+				break;
+
+			case await this.filterSingleDateField.isVisible():
+				await this.filterSingleDateField.fill(singleDate!);
+				break;
+
+			default:
+				// No value field needed (e.g., "Is empty", "Is today", etc.)
+				break;
 		}
 	}
 }
