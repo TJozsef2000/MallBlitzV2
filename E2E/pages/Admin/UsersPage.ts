@@ -52,6 +52,7 @@ export class UsersPage extends BasePage {
 	protected readonly filterSingleDateField: Locator;
 	protected readonly filterMinDateField: Locator;
 	protected readonly filterMaxDateField: Locator;
+	protected readonly filterNumbDays: Locator;
 	protected readonly filterAddNewFilter: Locator;
 	protected readonly filterClear: Locator;
 	protected readonly filterApply: Locator;
@@ -115,11 +116,10 @@ export class UsersPage extends BasePage {
 		this.filterSelectFieldDropdown = this.filterWrapper.getByRole("combobox").first();
 		this.filterSelectOperatorDropdown = this.filterWrapper.getByRole("combobox").nth(1);
 		this.filterValueField = this.filterWrapper.getByRole("textbox").first();
-		this.filterSingleDateField = this.filterWrapper.locator(
-			".w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100",
-		);
-		this.filterMinDateField = this.filterWrapper.locator('[placeholder="Min"]');
-		this.filterMaxDateField = this.filterWrapper.locator('[placeholder="Max"]');
+		this.filterSingleDateField = this.filterWrapper.getByTestId("date-input");
+		this.filterMinDateField = this.filterWrapper.getByTestId("range-input-min");
+		this.filterMaxDateField = this.filterWrapper.getByTestId("range-input-max");
+		this.filterNumbDays = this.filterWrapper.getByTestId("number-input");
 		this.filterAddNewFilter = this.filterWrapper.getByRole("button", { name: "Add additional filter" });
 		this.filterClear = this.filterWrapper.getByRole("button", { name: "Clear" });
 		this.filterApply = this.filterWrapper.getByRole("button", { name: "Apply" });
@@ -209,8 +209,11 @@ export class UsersPage extends BasePage {
 				await this.filterSingleDateField.fill(singleDate!);
 				break;
 
+			case await this.filterNumbDays.isVisible():
+				await this.filterNumbDays.fill(value);
+
 			default:
-				// No value field needed (e.g., "Is empty", "Is today", etc.)
+				// No value needed
 				break;
 		}
 	}
