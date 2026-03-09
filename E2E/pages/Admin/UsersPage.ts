@@ -211,7 +211,7 @@ export class UsersPage extends BasePage {
 
 			case await this.filterNumbDays.isVisible():
 				await this.filterNumbDays.fill(value);
-
+				break;
 			default:
 				// No value needed
 				break;
