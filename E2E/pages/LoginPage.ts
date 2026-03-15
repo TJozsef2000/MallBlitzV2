@@ -1,11 +1,8 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { testUserData } from "../helpers/env.helper";
 
-export const testUserData = {
-	fullName: process.env.LOGIN_FULLNAME!,
-	email: process.env.LOGIN_EMAIL!,
-	password: process.env.LOGIN_PASSWORD!,
-};
+export { testUserData } from "../helpers/env.helper";
 
 export class LoginPage extends BasePage {
 	protected readonly emailAddressField: Locator;
