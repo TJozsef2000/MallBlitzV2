@@ -1,10 +1,11 @@
 import path from "path";
 
 const requiredTestUserEnvVars = ["LOGIN_FULLNAME", "LOGIN_EMAIL", "LOGIN_PASSWORD"] as const;
+const requiredAdminEnvVars = ["ADMIN_LOGIN_EMAIL", "ADMIN_LOGIN_PASSWORD"] as const;
 
-type RequiredTestUserEnvVar = (typeof requiredTestUserEnvVars)[number];
+type RequiredEnvVar = (typeof requiredTestUserEnvVars)[number] | (typeof requiredAdminEnvVars)[number];
 
-function requireEnv(name: RequiredTestUserEnvVar): string {
+function requireEnv(name: RequiredEnvVar): string {
 	const value = process.env[name]?.trim();
 
 	if (!value) {
@@ -23,6 +24,15 @@ export const testUserData = {
 	password: requireEnv("LOGIN_PASSWORD"),
 };
 
+export const adminUserData = {
+	email: requireEnv("ADMIN_LOGIN_EMAIL"),
+	password: requireEnv("ADMIN_LOGIN_PASSWORD"),
+};
+
 export function validateTestUserEnv(): void {
 	requiredTestUserEnvVars.forEach(requireEnv);
+}
+
+export function validateAdminEnv(): void {
+	requiredAdminEnvVars.forEach(requireEnv);
 }

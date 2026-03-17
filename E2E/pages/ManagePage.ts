@@ -1,6 +1,9 @@
 import { Page } from "@playwright/test";
 import { AdminHeaderComponent } from "./Admin/Components/AdminHeaderComponent";
 import { AdminLeftSideBarComponent } from "./Admin/Components/AdminLeftSidebarComponent";
+import { BrandCreatePage } from "./Admin/BrandCreatePage";
+import { BrandsPage } from "./Admin/BrandsPage";
+import { AdminDashboardPage } from "./Admin/DashboardPage";
 import { UserCreatePage } from "./Admin/UserCreatePage";
 import { UsersPage } from "./Admin/UsersPage";
 import { BlogPage } from "./BlogPage";
@@ -41,8 +44,11 @@ export default class ManagePage {
 	private _TOSPage?: TOSPage;
 	private _adminHeader?: AdminHeaderComponent;
 	private _adminSideBar?: AdminLeftSideBarComponent;
+	private _adminDashboardPage?: AdminDashboardPage;
 	private _usersPage?: UsersPage;
 	private _userCreatePage?: UserCreatePage;
+	private _brandsPage?: BrandsPage;
+	private _brandCreatePage?: BrandCreatePage;
 
 	get dashboardPage(): DashboardPage {
 		return (this._dashboard ??= new DashboardPage(this.page));
@@ -116,11 +122,23 @@ export default class ManagePage {
 		return (this._adminSideBar ??= new AdminLeftSideBarComponent(this.page));
 	}
 
+	get adminDashboardPage(): AdminDashboardPage {
+		return (this._adminDashboardPage ??= new AdminDashboardPage(this.page));
+	}
+
 	get usersPage(): UsersPage {
 		return (this._usersPage ??= new UsersPage(this.page));
 	}
 
 	get userCreatePage(): UserCreatePage {
 		return (this._userCreatePage ??= new UserCreatePage(this.page));
+	}
+
+	get brandsPage(): BrandsPage {
+		return (this._brandsPage ??= new BrandsPage(this.page));
+	}
+
+	get brandCreatePage(): BrandCreatePage {
+		return (this._brandCreatePage ??= new BrandCreatePage(this.page));
 	}
 }
