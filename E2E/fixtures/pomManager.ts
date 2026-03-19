@@ -1,4 +1,5 @@
 import { test as base } from "@playwright/test";
+import { getAuthStatePath } from "../helpers/auth.helper";
 import { MailHelper } from "../helpers/mail.helper";
 import PomManager from "../pages/ManagePage";
 
@@ -14,6 +15,18 @@ export const test = base.extend<Fixture>({
 
 	mailHelper: async ({ request }, use) => {
 		await use(new MailHelper(request));
+	},
+});
+
+export const userTest = test.extend({
+	storageState: async ({}, use) => {
+		await use(getAuthStatePath("user"));
+	},
+});
+
+export const adminTest = test.extend({
+	storageState: async ({}, use) => {
+		await use(getAuthStatePath("admin"));
 	},
 });
 

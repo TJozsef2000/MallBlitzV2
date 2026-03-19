@@ -5,6 +5,21 @@ const requiredAdminEnvVars = ["ADMIN_LOGIN_EMAIL", "ADMIN_LOGIN_PASSWORD"] as co
 
 type RequiredEnvVar = (typeof requiredTestUserEnvVars)[number] | (typeof requiredAdminEnvVars)[number];
 
+export type AuthRole = "user" | "admin";
+
+export type TestUserData = {
+	role: "user";
+	fullName: string;
+	email: string;
+	password: string;
+};
+
+export type AdminUserData = {
+	role: "admin";
+	email: string;
+	password: string;
+};
+
 function requireEnv(name: RequiredEnvVar): string {
 	const value = process.env[name]?.trim();
 
@@ -18,16 +33,23 @@ function requireEnv(name: RequiredEnvVar): string {
 	return value;
 }
 
-export const testUserData = {
+export const testUserData: TestUserData = {
+	role: "user",
 	fullName: requireEnv("LOGIN_FULLNAME"),
 	email: requireEnv("LOGIN_EMAIL"),
 	password: requireEnv("LOGIN_PASSWORD"),
 };
 
-export const adminUserData = {
+export const adminUserData: AdminUserData = {
+	role: "admin",
 	email: requireEnv("ADMIN_LOGIN_EMAIL"),
 	password: requireEnv("ADMIN_LOGIN_PASSWORD"),
 };
+
+export const authUsers = {
+	user: testUserData,
+	admin: adminUserData,
+} as const;
 
 export function validateTestUserEnv(): void {
 	requiredTestUserEnvVars.forEach(requireEnv);

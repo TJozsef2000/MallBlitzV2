@@ -1,8 +1,11 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { testUserData } from "../helpers/env.helper";
 
-export { testUserData } from "../helpers/env.helper";
+export type LoginCredentials = {
+	email: string;
+	password: string;
+	rememberMe?: boolean;
+};
 
 export class LoginPage extends BasePage {
 	protected readonly emailAddressField: Locator;
@@ -34,16 +37,12 @@ export class LoginPage extends BasePage {
 		this.forgotPasswordLink = page.getByRole("link", { name: "Forgot your password?" });
 	}
 
-	// leave empty for env value or input your own
-	async fillLoginEmail(email?: string): Promise<void> {
-		const inputEmail = email ?? testUserData.email;
-		await this.emailAddressField.fill(inputEmail);
+	async fillLoginEmail(email: string): Promise<void> {
+		await this.emailAddressField.fill(email);
 	}
 
-	// leave empty for env value or input your own
-	async fillLoginPassword(password?: string): Promise<void> {
-		const inputPassword = password ?? testUserData.password;
-		await this.passwordField.fill(inputPassword);
+	async fillLoginPassword(password: string): Promise<void> {
+		await this.passwordField.fill(password);
 	}
 
 	async checkRememberMe(): Promise<void> {
@@ -52,6 +51,15 @@ export class LoginPage extends BasePage {
 
 	async clickLoginButton(): Promise<void> {
 		await this.loginButton.click();
+	}
+
+	async login({ email, password, rememberMe = false }: LoginCredentials): Promise<void> {
+		await this.fillLoginEmail(email);
+		await this.fillLoginPassword(password);
+		if (rememberMe) {
+			await this.checkRememberMe();
+		}
+		await this.clickLoginButton();
 	}
 
 	async verifyPage(): Promise<void> {

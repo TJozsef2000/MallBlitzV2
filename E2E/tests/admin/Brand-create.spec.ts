@@ -1,6 +1,5 @@
-import { test } from "../../fixtures/pomManager";
+import { adminTest as test } from "../../fixtures/pomManager";
 import { createBrandInfoFaker } from "../../factories/brand.factory";
-import { adminUserData } from "../../helpers/env.helper";
 
 test.describe("Brand create page coverage", () => {
 	let createdBrandNames: string[];
@@ -9,13 +8,6 @@ test.describe("Brand create page coverage", () => {
 
 	test.beforeEach(async ({ pomManager }) => {
 		createdBrandNames = [];
-
-		await pomManager.homePage.goToHomePage();
-		await pomManager.homePage.clickSignInButton();
-		await pomManager.loginPage.fillLoginEmail(adminUserData.email);
-		await pomManager.loginPage.fillLoginPassword(adminUserData.password);
-		await pomManager.loginPage.clickLoginButton();
-		await pomManager.adminDashboardPage.verifyPage();
 
 		await pomManager.brandCreatePage.goToPage();
 		await pomManager.brandCreatePage.verifyPage();

@@ -1,5 +1,5 @@
 import { test } from "../../fixtures/pomManager";
-import { testUserData } from "../../pages/LoginPage";
+import { testUserData } from "../../helpers/env.helper";
 
 test.describe("Login flow happy path", async () => {
 	test.beforeEach("Go to home page", async ({ pomManager }) => {
@@ -9,10 +9,11 @@ test.describe("Login flow happy path", async () => {
 	test("Successful login flow", async ({ pomManager }) => {
 		await test.step("Go to login page and login with valid credentials", async () => {
 			await pomManager.homePage.clickSignInButton();
-			await pomManager.loginPage.fillLoginEmail();
-			await pomManager.loginPage.fillLoginPassword();
-			await pomManager.loginPage.checkRememberMe();
-			await pomManager.loginPage.clickLoginButton();
+			await pomManager.loginPage.login({
+				email: testUserData.email,
+				password: testUserData.password,
+				rememberMe: true,
+			});
 		});
 
 		await test.step("Verify successful login", async () => {
@@ -42,11 +43,11 @@ test.describe("Incorrect login tests", async () => {
 	test("Incorrect email login", async ({ pomManager }) => {
 		await test.step("Go to login page and login with not yet registered email", async () => {
 			await pomManager.homePage.clickSignInButton();
-
-			await pomManager.loginPage.fillLoginEmail("incorrect@email.com");
-			await pomManager.loginPage.fillLoginPassword();
-			await pomManager.loginPage.checkRememberMe();
-			await pomManager.loginPage.clickLoginButton();
+			await pomManager.loginPage.login({
+				email: "incorrect@email.com",
+				password: testUserData.password,
+				rememberMe: true,
+			});
 		});
 
 		await test.step("Verify correct error message is visible", async () => {
@@ -57,11 +58,11 @@ test.describe("Incorrect login tests", async () => {
 	test("Incorrect password login", async ({ pomManager }) => {
 		await test.step("Go to login page and login with incorrect password", async () => {
 			await pomManager.homePage.clickSignInButton();
-
-			await pomManager.loginPage.fillLoginEmail();
-			await pomManager.loginPage.fillLoginPassword("incorrectpassword");
-			await pomManager.loginPage.checkRememberMe();
-			await pomManager.loginPage.clickLoginButton();
+			await pomManager.loginPage.login({
+				email: testUserData.email,
+				password: "incorrectpassword",
+				rememberMe: true,
+			});
 		});
 
 		await test.step("Verify correct error message is visible", async () => {

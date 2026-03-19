@@ -101,10 +101,10 @@ test("Reset password", async ({ pomManager, page, mailHelper }) => {
 	await test.step("Login with new password", async () => {
 		await pomManager.homePage.goToHomePage();
 		await pomManager.homePage.clickSignInButton();
-
-		await pomManager.loginPage.fillLoginEmail(userData.email);
-		await pomManager.loginPage.fillLoginPassword(userData.password);
-		await pomManager.loginPage.clickLoginButton();
+		await pomManager.loginPage.login({
+			email: userData.email,
+			password: userData.password,
+		});
 	});
 
 	await test.step("Cleanup - delete account", async () => {

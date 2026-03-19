@@ -123,6 +123,10 @@ export class ProfilePage extends BasePage {
 
 	// === Asserts ===
 
+	async goToPage(): Promise<void> {
+		await this.page.goto("/profile");
+	}
+
 	async verifyPage(): Promise<void> {
 		await expect(this.page).toHaveURL("https://mallblitz.com/profile");
 	}
