@@ -1,6 +1,6 @@
 import { test } from "../../fixtures/pomManager";
 
-test.describe("Footer flows", async () => {
+test.describe("Footer flows", () => {
 	test.beforeEach("Go to blog page", async ({ pomManager }) => {
 		await pomManager.blogPage.goToBlogPage();
 	});

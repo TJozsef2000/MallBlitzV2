@@ -1,7 +1,7 @@
 import { test } from "../../fixtures/pomManager";
 import { testUserData } from "../../helpers/env.helper";
 
-test.describe("Signup flow happy path", async () => {
+test.describe("Signup flow happy path", () => {
 	test.beforeEach("Go to home page", async ({ pomManager }) => {
 		await pomManager.homePage.goToHomePage();
 	});
@@ -51,10 +51,11 @@ test.describe("Signup flow happy path", async () => {
 	});
 });
 
-test.describe("Incorrect signup tests", async () => {
+test.describe("Incorrect signup tests", () => {
 	test.beforeEach("Go to home page", async ({ pomManager }) => {
 		await pomManager.homePage.goToHomePage();
 	});
+
 	test("Register with incorrect name", async ({ pomManager }) => {
 		await test.step("Verify home page and click register button", async () => {
 			await pomManager.homePage.verifyPage();
@@ -71,7 +72,9 @@ test.describe("Incorrect signup tests", async () => {
 		});
 
 		await test.step("Verify correct error message: 'The name field must only contain letters and spaces.'", async () => {
-			await pomManager.registerPage.verifyErrorMessage("The name field must only contain letters and spaces.");
+			await pomManager.registerPage.verifyErrorMessage(
+				"The name field must only contain letters and spaces.",
+			);
 		});
 	});
 

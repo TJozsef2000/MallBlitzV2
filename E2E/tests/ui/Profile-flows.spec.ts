@@ -1,7 +1,7 @@
 import { test as baseTest, userTest } from "../../fixtures/pomManager";
 import { testUserData } from "../../helpers/env.helper";
 
-userTest.describe("Profile page tests using preset user", async () => {
+userTest.describe("Profile page tests using preset user", () => {
 	userTest.beforeEach("Open profile page", async ({ pomManager }) => {
 		await pomManager.profilePage.goToPage();
 		await pomManager.profilePage.verifyPage();
@@ -27,7 +27,7 @@ userTest.describe("Profile page tests using preset user", async () => {
 	});
 });
 
-baseTest.describe("Profile page tests - using new users", async () => {
+baseTest.describe("Profile page tests - using new users", () => {
 	let userData: {
 		fullName: string;
 		email: string;

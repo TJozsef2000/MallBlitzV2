@@ -1,7 +1,7 @@
 import { test } from "../../fixtures/pomManager";
 import { testUserData } from "../../helpers/env.helper";
 
-test.describe("Login flow happy path", async () => {
+test.describe("Login flow happy path", () => {
 	test.beforeEach("Go to home page", async ({ pomManager }) => {
 		await pomManager.homePage.goToHomePage();
 	});
@@ -35,7 +35,7 @@ test.describe("Login flow happy path", async () => {
 	});
 });
 
-test.describe("Incorrect login tests", async () => {
+test.describe("Incorrect login tests", () => {
 	test.beforeEach("Go to home page", async ({ pomManager }) => {
 		await pomManager.homePage.goToHomePage();
 	});

@@ -92,7 +92,6 @@ test("Reset password", async ({ pomManager, page, mailHelper }) => {
 
 	await test.step("Fill password fields and reset password", async () => {
 		await pomManager.resetPasswordPage.verifyPage();
-		await page.waitForTimeout(500);
 		userData.password = await pomManager.resetPasswordPage.fillPasswordFields();
 		await pomManager.resetPasswordPage.clickResetPassword();
 		await pomManager.resetPasswordPage.verifySuccessMessage();
