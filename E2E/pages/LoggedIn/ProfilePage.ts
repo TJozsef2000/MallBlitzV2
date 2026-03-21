@@ -124,7 +124,12 @@ export class ProfilePage extends BasePage {
 	// === Asserts ===
 
 	async goToPage(): Promise<void> {
-		await this.page.goto("/profile");
+		await this.gotoAndWaitForReady("/profile", async () => {
+			// This page finishes wiring form handlers after the initial document load.
+			await this.page.waitForLoadState("networkidle");
+			await expect(this.fullNameField).toBeEditable();
+			await expect(this.newEmailAddressField).toBeEditable();
+		});
 	}
 
 	async verifyPage(): Promise<void> {

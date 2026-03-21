@@ -235,7 +235,7 @@ export class AdminDataTableComponent {
 			return;
 		}
 
-		const firstToggleContainer = this.page.locator(`[data-test-id="${firstColumn.visibilityTestId}"]`);
+		const firstToggleContainer = this.columnVisibilityToggleContainer(firstColumn.header);
 		if (!(await firstToggleContainer.isVisible().catch(() => false))) {
 			await this.columnsButton.click();
 			await expect(firstToggleContainer).toBeVisible({ timeout: 10000 });
@@ -247,7 +247,7 @@ export class AdminDataTableComponent {
 		const toggle = this.columnVisibilityToggle(column);
 		const isChecked = await toggle.isChecked();
 		if (isChecked !== visible) {
-			await toggle.locator("xpath=ancestor::*[@data-test-id][1]").click();
+			await this.columnVisibilityToggleContainer(column).click();
 		}
 	}
 
@@ -470,12 +470,16 @@ export class AdminDataTableComponent {
 	}
 
 	private columnVisibilityToggle(column: string): Locator {
+		return this.columnVisibilityToggleContainer(column).locator('input[type="checkbox"]');
+	}
+
+	private columnVisibilityToggleContainer(column: string): Locator {
 		const columnConfig = this.columnConfig(column);
 		if (!columnConfig?.visibilityTestId) {
 			throw new Error(`No column visibility toggle is configured for "${column}".`);
 		}
 
-		return this.page.locator(`[data-test-id="${columnConfig.visibilityTestId}"] input[type="checkbox"]`);
+		return this.page.locator(`[data-test-id="${columnConfig.visibilityTestId}"]`);
 	}
 
 	private pageSizeSelect(): Locator {

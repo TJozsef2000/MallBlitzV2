@@ -49,10 +49,11 @@ export class UsersPage extends BasePage {
 		this.importButton = this.page.getByRole("button", { name: "Import" });
 		this.addUserButton = this.page.getByRole("button", { name: "Add User" });
 		const tableSearchInput = this.page.getByRole("textbox", { name: "Search users by name or email..." });
+		const tableRoot = this.page.locator("fieldset").filter({ has: tableSearchInput }).first();
 
 		this.table = new AdminDataTableComponent(
 			this.page,
-			tableSearchInput.locator("xpath=ancestor::fieldset[1]"),
+			tableRoot,
 			{
 			columns: [
 				{

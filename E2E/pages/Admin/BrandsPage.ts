@@ -21,9 +21,10 @@ export class BrandsPage extends BasePage {
 		this.addBrandButton = this.page.getByRole("button", { name: "Add Brand" });
 		this.deleteButton = this.page.getByRole("button", { name: "Delete" });
 		const tableSearchInput = this.page.getByRole("textbox", { name: "Search brands by name or description..." });
+		const tableRoot = this.page.locator("fieldset").filter({ has: tableSearchInput }).first();
 		this.table = new AdminDataTableComponent(
 			this.page,
-			tableSearchInput.locator("xpath=ancestor::fieldset[1]"),
+			tableRoot,
 			{
 			columns: [
 				{
