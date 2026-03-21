@@ -1,11 +1,11 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
-export type LoginCredentials = {
+export interface LoginCredentials {
 	email: string;
 	password: string;
 	rememberMe?: boolean;
-};
+}
 
 export class LoginPage extends BasePage {
 	protected readonly emailAddressField: Locator;

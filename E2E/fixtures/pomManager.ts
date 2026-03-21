@@ -3,10 +3,10 @@ import { getAuthStatePath } from "../helpers/auth.helper";
 import { MailHelper } from "../helpers/mail.helper";
 import PomManager from "../pages/ManagePage";
 
-type Fixture = {
+interface Fixture {
 	pomManager: PomManager;
 	mailHelper: MailHelper;
-};
+}
 
 export const test = base.extend<Fixture>({
 	pomManager: async ({ page }, use) => {
@@ -19,13 +19,13 @@ export const test = base.extend<Fixture>({
 });
 
 export const userTest = test.extend({
-	storageState: async ({}, use) => {
+	storageState: async ({ browserName: _browserName }, use) => {
 		await use(getAuthStatePath("user"));
 	},
 });
 
 export const adminTest = test.extend({
-	storageState: async ({}, use) => {
+	storageState: async ({ browserName: _browserName }, use) => {
 		await use(getAuthStatePath("admin"));
 	},
 });

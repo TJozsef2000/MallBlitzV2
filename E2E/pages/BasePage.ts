@@ -7,10 +7,7 @@ export abstract class BasePage {
 		await this.page.goto("");
 	}
 
-	protected async gotoAndWaitForReady(
-		url: string,
-		ready: Locator | (() => Promise<void>),
-	): Promise<void> {
+	protected async gotoAndWaitForReady(url: string, ready: Locator | (() => Promise<void>)): Promise<void> {
 		await this.page.goto(url, { waitUntil: "domcontentloaded" });
 
 		if (typeof ready === "function") {

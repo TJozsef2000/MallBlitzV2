@@ -51,10 +51,7 @@ export class UsersPage extends BasePage {
 		const tableSearchInput = this.page.getByRole("textbox", { name: "Search users by name or email..." });
 		const tableRoot = this.page.locator("fieldset").filter({ has: tableSearchInput }).first();
 
-		this.table = new AdminDataTableComponent(
-			this.page,
-			tableRoot,
-			{
+		this.table = new AdminDataTableComponent(this.page, tableRoot, {
 			columns: [
 				{
 					key: "id",
@@ -92,8 +89,7 @@ export class UsersPage extends BasePage {
 					visibilityTestId: "datatable-column-visibility-created_at",
 				},
 			],
-			},
-		);
+		});
 	}
 
 	async goToPage(): Promise<void> {
@@ -108,7 +104,9 @@ export class UsersPage extends BasePage {
 		await this.table.search(query);
 	}
 
-	async performUserAction(action: "Mark as verified" | "Mark as unverified" | "Delete Selected"): Promise<void> {
+	async performUserAction(
+		action: "Mark as verified" | "Mark as unverified" | "Delete Selected",
+	): Promise<void> {
 		await this.table.openBulkActions();
 		if (action === "Mark as verified") {
 			await this.page.getByRole("button", { name: /^Mark as Verified/ }).click();

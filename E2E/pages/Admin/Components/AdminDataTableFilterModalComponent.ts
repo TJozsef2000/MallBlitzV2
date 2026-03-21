@@ -12,11 +12,11 @@ export type DataTableFilterInputMode =
 	| "select"
 	| "text";
 
-type RuleExpectation = {
+interface RuleExpectation {
 	field: string;
 	operator: string;
 	value?: DataTableFilterValue;
-};
+}
 
 export class AdminDataTableFilterModalComponent {
 	private readonly heading: Locator;
@@ -26,9 +26,12 @@ export class AdminDataTableFilterModalComponent {
 
 	constructor(
 		private readonly page: Page,
-		private readonly modal: Locator = page.locator("body > div").filter({
-			has: page.getByRole("heading", { name: "Filter", exact: true }),
-		}).last(),
+		private readonly modal: Locator = page
+			.locator("body > div")
+			.filter({
+				has: page.getByRole("heading", { name: "Filter", exact: true }),
+			})
+			.last(),
 	) {
 		this.heading = this.modal.getByRole("heading", { name: "Filter", exact: true });
 		this.addRuleButton = this.modal.getByRole("button", { name: "Add additional filter" });
@@ -164,7 +167,7 @@ export class AdminDataTableFilterModalComponent {
 
 		switch (mode) {
 			case "boolean":
-				await expect(await this.countVisibleBooleanControls(rule)).toBeGreaterThan(0);
+				expect(await this.countVisibleBooleanControls(rule)).toBeGreaterThan(0);
 				return;
 			case "date":
 				expect(inputTypes).toEqual(["date"]);
@@ -191,12 +194,14 @@ export class AdminDataTableFilterModalComponent {
 				expect(inputTypes).toEqual(["text"]);
 				return;
 			default:
-				expect(mode).toBeDefined();
+				throw new Error(`Unsupported input mode: ${String(mode)}`);
 		}
 	}
 
 	private rule(index: number): Locator {
-		return this.modal.locator('xpath=.//*[count(.//select) >= 2 and not(descendant::*[count(.//select) >= 2])]').nth(index);
+		return this.modal
+			.locator("xpath=.//*[count(.//select) >= 2 and not(descendant::*[count(.//select) >= 2])]")
+			.nth(index);
 	}
 
 	private fieldSelect(index: number): Locator {

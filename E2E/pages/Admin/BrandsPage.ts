@@ -2,12 +2,12 @@ import { expect, Locator, Page } from "@playwright/test";
 import { AdminDataTableComponent } from "./Components/AdminDataTableComponent";
 import { BasePage } from "../BasePage";
 
-type BrandRowExpectations = {
+interface BrandRowExpectations {
 	status?: string;
 	featured?: string;
 	website?: string;
 	order?: string;
-};
+}
 
 export class BrandsPage extends BasePage {
 	readonly table: AdminDataTableComponent;
@@ -20,12 +20,11 @@ export class BrandsPage extends BasePage {
 
 		this.addBrandButton = this.page.getByRole("button", { name: "Add Brand" });
 		this.deleteButton = this.page.getByRole("button", { name: "Delete" });
-		const tableSearchInput = this.page.getByRole("textbox", { name: "Search brands by name or description..." });
+		const tableSearchInput = this.page.getByRole("textbox", {
+			name: "Search brands by name or description...",
+		});
 		const tableRoot = this.page.locator("fieldset").filter({ has: tableSearchInput }).first();
-		this.table = new AdminDataTableComponent(
-			this.page,
-			tableRoot,
-			{
+		this.table = new AdminDataTableComponent(this.page, tableRoot, {
 			columns: [
 				{
 					key: "id",
@@ -66,8 +65,7 @@ export class BrandsPage extends BasePage {
 			],
 			emptyStateTitle: "No brands found",
 			emptyStateDescription: "Try adjusting your search or filter criteria.",
-			},
-		);
+		});
 	}
 
 	async goToPage(): Promise<void> {
@@ -119,9 +117,8 @@ export class BrandsPage extends BasePage {
 	async deleteBrandIfPresent(name: string): Promise<boolean> {
 		await this.searchBrand(name);
 
-		let row: Locator;
 		try {
-			row = await this.brandRow(name);
+			await this.brandRow(name);
 		} catch {
 			return false;
 		}
@@ -129,13 +126,15 @@ export class BrandsPage extends BasePage {
 		this.page.once("dialog", (dialog) => dialog.accept());
 		await this.table.openRowActions("Brand Name", name);
 		await this.deleteButton.click();
-		await expect.poll(async () => {
-			try {
-				return (await this.brandRow(name)).count();
-			} catch {
-				return 0;
-			}
-		}).toBe(0);
+		await expect
+			.poll(async () => {
+				try {
+					return (await this.brandRow(name)).count();
+				} catch {
+					return 0;
+				}
+			})
+			.toBe(0);
 
 		return true;
 	}

@@ -22,6 +22,7 @@ Forgatókönyv: A felhasználói tábla alap nézete helyesen jelenik meg
 ```
 
 Mit ellenőrzünk:
+
 - A táblázat szerkezete helyes.
 - A látható oszlopok sorrendje megfelel az elvárásnak.
 - Az alap pagination állapotból 10 rekord látszik.
@@ -45,6 +46,7 @@ Forgatókönyv: A keresés és rendezés működik a felhasználói táblában
 ```
 
 Mit ellenőrzünk:
+
 - A keresőmező valóban szűri a látható eredményeket.
 - A keresés törlése visszaállítja az eredeti listát.
 - A rendezés felhasználói nézőpontból ténylegesen átrendezi a sorokat.
@@ -65,6 +67,7 @@ Forgatókönyv: A sorra kattintás navigál, de a soron belüli interakciók nem
 ```
 
 Mit ellenőrzünk:
+
 - A checkbox kattintás nem viselkedik sor-kattintásként.
 - A row action trigger nem indít navigációt.
 - A tényleges sor-kattintás megnyitja a részletező oldalt.
@@ -106,6 +109,7 @@ Forgatókönyv: A bulk actionök és a szűrő modal állapota helyes
 ```
 
 Mit ellenőrzünk:
+
 - A bulk actionök csak kijelölés után aktiválódnak.
 - A filter builder a kiválasztott mező típusa alapján vált input módot.
 - Az alkalmazott szűrő ténylegesen visszatölthető.
@@ -149,6 +153,7 @@ Forgatókönyv: Az oszlopkezelés, frissítés és pagination működik
 ```
 
 Mit ellenőrzünk:
+
 - Az oszlopelrejtés és visszaállítás a felületen is megjelenik.
 - Az ID oszlop nem rejthető el.
 - A refresh betöltési állapotot mutat.

@@ -7,18 +7,18 @@ type RequiredEnvVar = (typeof requiredTestUserEnvVars)[number] | (typeof require
 
 export type AuthRole = "user" | "admin";
 
-export type TestUserData = {
+export interface TestUserData {
 	role: "user";
 	fullName: string;
 	email: string;
 	password: string;
-};
+}
 
-export type AdminUserData = {
+export interface AdminUserData {
 	role: "admin";
 	email: string;
 	password: string;
-};
+}
 
 function requireEnv(name: RequiredEnvVar): string {
 	const value = process.env[name]?.trim();

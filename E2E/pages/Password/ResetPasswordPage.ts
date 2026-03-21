@@ -18,12 +18,14 @@ export class ResetPasswordPage extends BasePage {
 		this.resetPasswordButton = page.getByRole("button", { name: "Reset Password" });
 
 		this.resetSuccessMessage = page.getByText(
-			"Password reset successfully! You can now sign in with your new password."
+			"Password reset successfully! You can now sign in with your new password.",
 		);
 	}
 
 	async verifyPage(): Promise<void> {
 		await expect(this.page).toHaveURL(/password-reset/);
+		await expect(this.newPasswordField).toBeEditable();
+		await expect(this.confirmPasswordField).toBeEditable();
 	}
 
 	async fillEmailField(email: string): Promise<void> {

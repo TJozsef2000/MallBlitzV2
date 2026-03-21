@@ -31,6 +31,7 @@ Forgatókönyv: A táblázat képes egyedi cellatartalmat és opcionális oszlop
 ```
 
 Mit ellenőrzünk:
+
 - A custom rendererrel készült cellák helyesen jelennek meg.
 - Az opcionális selection/actions oszlopok konfiguráció alapján ki-be kapcsolhatók.
 
@@ -53,6 +54,7 @@ Forgatókönyv: A bulk és row action állapotok a kijelöléstől függnek
 ```
 
 Mit ellenőrzünk:
+
 - A bulk actionök állapota a selection állapothoz kötődik.
 - A row actionök soronként különböző állapotot vehetnek fel.
 
@@ -82,6 +84,7 @@ Forgatókönyv: A filter builder a mező típusa alapján vált input módot
 ```
 
 Mit ellenőrzünk:
+
 - A filter builder típushelyesen vált a különböző input kontrollok között.
 - A mező definíciója meghatározza a szükséges értékbeviteli módot.
 
@@ -112,6 +115,7 @@ Forgatókönyv: A tábla helyesen kezeli a betöltést, az üres állapotot és 
 ```
 
 Mit ellenőrzünk:
+
 - A lapozás helyesen számolja a tartományt és az oldalszámot.
 - A refresh valódi loading állapotot idéz elő.
 - Üres keresési eredmény esetén empty state jelenik meg, pagination nélkül.

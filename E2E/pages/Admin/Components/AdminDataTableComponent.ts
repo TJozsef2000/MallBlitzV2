@@ -1,40 +1,40 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { AdminDataTableFilterModalComponent } from "./AdminDataTableFilterModalComponent";
 
-export type DataTableColumnConfig = {
+export interface DataTableColumnConfig {
 	header: string;
 	key: string;
 	sortTestId?: string;
 	visibilityTestId?: string;
-};
+}
 
-export type DataTableConfig = {
+export interface DataTableConfig {
 	columns: DataTableColumnConfig[];
 	emptyStateDescription?: string;
 	emptyStateTitle?: string;
 	loadingText?: string;
-};
+}
 
-export type DataTablePaginationExpectation = {
+export interface DataTablePaginationExpectation {
 	pageText?: string;
 	rangeText?: string;
 	visible?: boolean;
-};
+}
 
-export type DataTablePaginationSnapshot = {
+export interface DataTablePaginationSnapshot {
 	end: number;
 	page: number;
 	start: number;
 	total: number;
 	totalPages: number;
-};
+}
 
 export type DataTableSortDirection = "asc" | "desc";
 
-type ActionExpectation = {
+interface ActionExpectation {
 	action: string;
 	enabled: boolean;
-};
+}
 
 export class AdminDataTableComponent {
 	private readonly table: Locator;
@@ -107,10 +107,15 @@ export class AdminDataTableComponent {
 
 	async visibleRowCellValues(column: string): Promise<string[]> {
 		const columnIndex = await this.getColumnIndex(column);
-		return await this.bodyRows().evaluateAll((rows, targetIndex) =>
-			rows
-				.filter((row) => row.querySelectorAll("td").length > 1)
-				.map((row) => row.querySelectorAll("td")[Number(targetIndex) - 1]?.textContent?.replace(/\s+/g, " ").trim() ?? ""),
+		return await this.bodyRows().evaluateAll(
+			(rows, targetIndex) =>
+				rows
+					.filter((row) => row.querySelectorAll("td").length > 1)
+					.map(
+						(row) =>
+							row.querySelectorAll("td")[Number(targetIndex) - 1]?.textContent?.replace(/\s+/g, " ").trim() ??
+							"",
+					),
 			columnIndex,
 		);
 	}
@@ -142,8 +147,7 @@ export class AdminDataTableComponent {
 	async sortBy(column: string, direction: DataTableSortDirection = "asc"): Promise<void> {
 		const sortTrigger = await this.sortTrigger(column);
 		const needsDoubleClick =
-			direction === "desc" &&
-			(!this.currentSort || this.currentSort.column !== column || this.currentSort.direction !== "asc");
+			direction === "desc" && (this.currentSort?.column !== column || this.currentSort?.direction !== "asc");
 
 		await sortTrigger.click();
 		await this.waitForIdle();
@@ -296,7 +300,10 @@ export class AdminDataTableComponent {
 		await this.waitForIdle();
 	}
 
-	async expectEmptyState(title = this.config.emptyStateTitle, description = this.config.emptyStateDescription): Promise<void> {
+	async expectEmptyState(
+		title = this.config.emptyStateTitle,
+		description = this.config.emptyStateDescription,
+	): Promise<void> {
 		if (title) {
 			await expect(this.table.getByText(title, { exact: true })).toBeVisible();
 		}
@@ -338,8 +345,8 @@ export class AdminDataTableComponent {
 
 		const rangeText = (await paginationText.textContent()) ?? "";
 		const pageLabel = (await pageText.textContent()) ?? "";
-		const rangeMatch = rangeText.match(/Show (\d+) to (\d+) of (\d+) records/);
-		const pageMatch = pageLabel.match(/Page (\d+) of (\d+)/);
+		const rangeMatch = /Show (\d+) to (\d+) of (\d+) records/.exec(rangeText);
+		const pageMatch = /Page (\d+) of (\d+)/.exec(pageLabel);
 
 		if (!rangeMatch || !pageMatch) {
 			throw new Error("Unable to parse datatable pagination text.");
@@ -384,7 +391,9 @@ export class AdminDataTableComponent {
 	}
 
 	private async dataRowCount(): Promise<number> {
-		return await this.bodyRows().evaluateAll((rows) => rows.filter((row) => row.querySelectorAll("td").length > 1).length);
+		return await this.bodyRows().evaluateAll(
+			(rows) => rows.filter((row) => row.querySelectorAll("td").length > 1).length,
+		);
 	}
 
 	private bodyRows(): Locator {
@@ -433,7 +442,11 @@ export class AdminDataTableComponent {
 		}
 
 		const columnIndex = await this.getColumnIndex(column);
-		return this.table.locator("thead th").nth(columnIndex - 1).getByRole("button").first();
+		return this.table
+			.locator("thead th")
+			.nth(columnIndex - 1)
+			.getByRole("button")
+			.first();
 	}
 
 	private selectAllControl(): Locator {

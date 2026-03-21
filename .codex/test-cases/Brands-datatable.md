@@ -24,6 +24,7 @@ Forgatókönyv: A brand lista közös DataTable eszköztára látható
 ```
 
 Mit ellenőrzünk:
+
 - A shared DataTable toolbar a brands oldalon is jelen van.
 - A brands tábla a várt oszlopkészlettel renderelődik.
 
@@ -39,6 +40,7 @@ Forgatókönyv: A keresés üres állapotot eredményez
 ```
 
 Mit ellenőrzünk:
+
 - Az empty state megfelelően jelenik meg üres eredményhalmaz esetén.
 - A kereső és szűrő belépési pontok üres állapotban sem tűnnek el.
 
@@ -53,5 +55,6 @@ Forgatókönyv: Üres találatlista mellett az ID oszlop zárolt és nincs lapoz
 ```
 
 Mit ellenőrzünk:
+
 - Az ID oszlop brands nézetben sem rejthető el.
 - Üres állapotban a lapozó nem jelenik meg feleslegesen.

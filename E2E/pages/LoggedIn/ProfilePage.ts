@@ -1,5 +1,4 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { error } from "console";
 import { createRegisterInfoFaker } from "../../factories/register.factory";
 import { BasePage } from "../BasePage";
 
@@ -153,7 +152,7 @@ export class ProfilePage extends BasePage {
 		} else if (state === "Invalid") {
 			filePath = "E2E/assets/textFile.txt";
 		} else {
-			throw error("Invlaid avatar state");
+			throw new Error("Invalid avatar state");
 		}
 		await this.fileInput.setInputFiles(filePath);
 	}
