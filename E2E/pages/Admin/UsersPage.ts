@@ -1,7 +1,9 @@
 import { expect, Locator, Page } from "@playwright/test";
+import { AdminDataTableComponent } from "./Components/AdminDataTableComponent";
+import { AdminDataTableFilterModalComponent } from "./Components/AdminDataTableFilterModalComponent";
 import { BasePage } from "../BasePage";
 
-enum FilterSelectOperator {
+export enum FilterSelectOperator {
 	Equals = "Equals",
 	Contains = "Contains",
 	DoesNotContain = "Does not contain",
@@ -17,7 +19,7 @@ enum FilterSelectOperator {
 	LastNDays = "Last N days",
 }
 
-enum FilterSelectField {
+export enum FilterSelectField {
 	Name = "Name",
 	Email = "Email",
 	VerificationStatus = "Verification Status",
@@ -26,6 +28,8 @@ enum FilterSelectField {
 }
 
 export class UsersPage extends BasePage {
+	readonly table: AdminDataTableComponent;
+
 	// === User Management ===
 	protected readonly exportButton: Locator;
 	protected readonly exportAsExcel: Locator;
@@ -34,62 +38,6 @@ export class UsersPage extends BasePage {
 	protected readonly importButton: Locator;
 	protected readonly addUserButton: Locator;
 
-	// === Table management ===
-	protected readonly searchField: Locator;
-
-	// - Table actions -
-	protected readonly actionsButton: Locator;
-	protected readonly markAsVerifiedButton: Locator;
-	protected readonly markAsUnverifiedButton: Locator;
-	protected readonly deleteSelectedButton: Locator;
-
-	// - Filter -
-	protected readonly filterWrapper: Locator;
-	protected readonly filterButton: Locator;
-	protected readonly filterSelectFieldDropdown: Locator;
-	protected readonly filterSelectOperatorDropdown: Locator;
-	protected readonly filterValueField: Locator;
-	protected readonly filterSingleDateField: Locator;
-	protected readonly filterMinDateField: Locator;
-	protected readonly filterMaxDateField: Locator;
-	protected readonly filterNumbDays: Locator;
-	protected readonly filterAddNewFilter: Locator;
-	protected readonly filterClear: Locator;
-	protected readonly filterApply: Locator;
-
-	// - Refresh -
-	protected readonly refreshButton: Locator;
-
-	// - Columns view -
-	protected readonly colViewButton: Locator;
-	protected readonly userCheckbox: Locator;
-	protected readonly emailCheckbox: Locator;
-	protected readonly statusCheckbox: Locator;
-	protected readonly roleCheckbox: Locator;
-	protected readonly joinedCheckbox;
-
-	// === Table ===
-
-	// -- Table sort --
-	protected readonly selectAll: Locator;
-	protected readonly sortByID: Locator;
-	protected readonly sortByUser: Locator;
-	protected readonly sortByEmail: Locator;
-	protected readonly sortByStatus: Locator;
-	protected readonly sortByJoined: Locator;
-
-	// -- Row locators --
-	protected readonly tableBody: Locator;
-	protected readonly tableRows: Locator;
-
-	// === Pagination ===
-	protected readonly paginationWrapper: Locator;
-	protected readonly rowsPerPageCombo: Locator;
-	protected readonly paginationFirstPageButton: Locator;
-	protected readonly paginationLastPageButton: Locator;
-	protected readonly paginationNextPageButton: Locator;
-	protected readonly paginationPreviousPageButton: Locator;
-
 	constructor(protected readonly page: Page) {
 		super(page);
 
@@ -97,125 +45,103 @@ export class UsersPage extends BasePage {
 		this.exportButton = this.page.getByRole("button", { name: "Export" });
 		this.exportAsExcel = this.page.getByRole("menuitem", { name: "Export as Excel (.xlsx)" });
 		this.exportAsCSV = this.page.getByRole("menuitem", { name: "Export as CSV" });
-		this.downloadImportTemplate = this.page.getByRole("menuitem", { name: "Export as CSV" });
+		this.downloadImportTemplate = this.page.getByRole("menuitem", { name: "Download import template" });
 		this.importButton = this.page.getByRole("button", { name: "Import" });
 		this.addUserButton = this.page.getByRole("button", { name: "Add User" });
+		const tableSearchInput = this.page.getByRole("textbox", { name: "Search users by name or email..." });
 
-		// === Table management ===
-		this.searchField = this.page.getByRole("textbox", { name: "Search users by name or email" });
+		this.table = new AdminDataTableComponent(
+			this.page,
+			tableSearchInput.locator("xpath=ancestor::fieldset[1]"),
+			{
+			columns: [
+				{
+					key: "id",
+					header: "ID",
+					sortTestId: "datatable-sort-trigger-id",
+					visibilityTestId: "datatable-column-visibility-id",
+				},
+				{
+					key: "name",
+					header: "User",
+					sortTestId: "datatable-sort-trigger-name",
+					visibilityTestId: "datatable-column-visibility-name",
+				},
+				{
+					key: "email",
+					header: "Email",
+					sortTestId: "datatable-sort-trigger-email",
+					visibilityTestId: "datatable-column-visibility-email",
+				},
+				{
+					key: "email_verified_at",
+					header: "Status",
+					sortTestId: "datatable-sort-trigger-email_verified_at",
+					visibilityTestId: "datatable-column-visibility-email_verified_at",
+				},
+				{
+					key: "roles",
+					header: "Role",
+					visibilityTestId: "datatable-column-visibility-roles",
+				},
+				{
+					key: "created_at",
+					header: "Joined",
+					sortTestId: "datatable-sort-trigger-created_at",
+					visibilityTestId: "datatable-column-visibility-created_at",
+				},
+			],
+			},
+		);
+	}
 
-		// - Table actions -
-		this.actionsButton = this.page.getByRole("button", { name: "Actions" });
-		this.markAsVerifiedButton = this.page.getByRole("button", { name: "Mark as Verified" });
-		this.markAsUnverifiedButton = this.page.getByRole("button", { name: "Mark as Unverified" });
-		this.deleteSelectedButton = this.page.getByRole("button", { name: "Delete Selected" });
-
-		// - Filter -
-		this.filterWrapper = this.page.locator(".w-full max-w-4xl");
-		this.filterButton = this.page.getByRole("button", { name: "Filter" });
-		this.filterSelectFieldDropdown = this.filterWrapper.getByRole("combobox").first();
-		this.filterSelectOperatorDropdown = this.filterWrapper.getByRole("combobox").nth(1);
-		this.filterValueField = this.filterWrapper.getByRole("textbox").first();
-		this.filterSingleDateField = this.filterWrapper.getByTestId("date-input");
-		this.filterMinDateField = this.filterWrapper.getByTestId("range-input-min");
-		this.filterMaxDateField = this.filterWrapper.getByTestId("range-input-max");
-		this.filterNumbDays = this.filterWrapper.getByTestId("number-input");
-		this.filterAddNewFilter = this.filterWrapper.getByRole("button", { name: "Add additional filter" });
-		this.filterClear = this.filterWrapper.getByRole("button", { name: "Clear" });
-		this.filterApply = this.filterWrapper.getByRole("button", { name: "Apply" });
-
-		// - Refresh -
-		this.refreshButton = this.page.getByRole("button", { name: "Refresh" });
-
-		// - Columns view -
-		this.colViewButton = this.page.getByRole("button", { name: "Columns" });
-		this.userCheckbox = this.page.getByRole("checkbox", { name: "User" });
-		this.emailCheckbox = this.page.getByRole("checkbox", { name: "Email" });
-		this.statusCheckbox = this.page.getByRole("checkbox", { name: "Status" });
-		this.roleCheckbox = this.page.getByRole("checkbox", { name: "Role" });
-		this.joinedCheckbox = this.page.getByRole("checkbox", { name: "Joined" });
-
-		// === Table ===
-		this.tableBody = this.page.locator("tbody");
-		this.tableRows = this.tableBody.locator("tr");
-
-		// -- Table sort --
-		this.selectAll = this.page.getByTestId("datatable-select-all-checkbox");
-		this.sortByID = this.page.getByTestId("datatable-sort-trigger-id");
-		this.sortByUser = this.page.getByTestId("datatable-sort-trigger-name");
-		this.sortByEmail = this.page.getByTestId("datatable-sort-trigger-email");
-		this.sortByStatus = this.page.getByTestId("datatable-sort-trigger-email_verified_at");
-		this.sortByJoined = this.page.getByTestId("datatable-sort-trigger-created_at");
-
-		// === Pagination ===
-		this.paginationWrapper = this.page.locator(".flex items-center justify-between pt-4");
-		this.rowsPerPageCombo = this.paginationWrapper.getByRole("combobox");
-		this.paginationFirstPageButton = this.paginationWrapper.getByRole("button", { name: "Go to first page" });
-		this.paginationNextPageButton = this.paginationWrapper.getByRole("button", { name: "Go to previous page" });
-		this.paginationPreviousPageButton = this.paginationWrapper.getByRole("button", { name: "Go to next page" });
-		this.paginationLastPageButton = this.paginationWrapper.getByRole("button", { name: "Go to last page" });
+	async goToPage(): Promise<void> {
+		await this.page.goto("/admin/users", { waitUntil: "domcontentloaded" });
 	}
 
 	async verifyPage(): Promise<void> {
-		await expect(this.page).toHaveURL("https://mallblitz.com/admin/users");
+		await expect(this.page).toHaveURL(/https:\/\/mallblitz\.com\/admin\/users(?:\?.*)?$/);
 	}
 
 	async enterSearchQuery(query: string): Promise<void> {
-		await this.searchField.fill(query);
+		await this.table.search(query);
 	}
 
 	async performUserAction(action: "Mark as verified" | "Mark as unverified" | "Delete Selected"): Promise<void> {
-		await this.actionsButton.click();
+		await this.table.openBulkActions();
 		if (action === "Mark as verified") {
-			await this.markAsUnverifiedButton.click();
+			await this.page.getByRole("button", { name: /^Mark as Verified/ }).click();
 		} else if (action === "Mark as unverified") {
-			await this.markAsUnverifiedButton.click();
+			await this.page.getByRole("button", { name: /^Mark as Unverified/ }).click();
 		} else if (action === "Delete Selected") {
-			await this.deleteSelectedButton.click();
+			await this.page.getByRole("button", { name: /^Delete Selected/ }).click();
 		}
 	}
 
-	private async filterSelectField(field: FilterSelectField): Promise<void> {
-		await this.filterSelectFieldDropdown.click();
-		await this.filterSelectFieldDropdown.selectOption(field);
-	}
-
-	private async filterSelectOperator(operator: FilterSelectOperator): Promise<void> {
-		await this.filterSelectOperatorDropdown.click();
-		await this.filterSelectOperatorDropdown.selectOption(operator);
+	async openFilters(): Promise<AdminDataTableFilterModalComponent> {
+		return await this.table.openFilters();
 	}
 
 	async applyFilter(
 		field: FilterSelectField,
 		operator: FilterSelectOperator,
-		value?: any,
+		value?: boolean | number | string,
 		singleDate?: string, // MM-DD-YYYY
 		dateMin?: string,
 		dateMax?: string,
 	): Promise<void> {
-		await this.filterSelectField(field);
-		await this.filterSelectOperator(operator);
-		switch (true) {
-			case await this.filterValueField.isVisible():
-				await this.filterValueField.fill(value);
-				break;
+		const modal = await this.openFilters();
+		await modal.setField(field);
+		await modal.setOperator(operator);
 
-			case (await this.filterMinDateField.isVisible()) && (await this.filterMaxDateField.isVisible()):
-				await this.filterMinDateField.fill(dateMin!);
-				await this.filterMaxDateField.fill(dateMax!);
-				break;
-
-			case await this.filterSingleDateField.isVisible():
-				await this.filterSingleDateField.fill(singleDate!);
-				break;
-
-			case await this.filterNumbDays.isVisible():
-				await this.filterNumbDays.fill(value);
-				break;
-
-			default:
-				// No value needed
-				break;
+		if (dateMin && dateMax) {
+			await modal.setValue([dateMin, dateMax]);
+		} else if (singleDate) {
+			await modal.setValue(singleDate);
+		} else if (value !== undefined) {
+			await modal.setValue(value);
 		}
+
+		await modal.apply();
 	}
 }

@@ -35,16 +35,19 @@ export class BrandCreatePage extends BasePage {
 		this.sortOrderErrorMessage = this.page.getByText("Sort order must be 0 or greater");
 		this.featuredBrandToggle = this.page.getByRole("switch", { name: "Toggle switch" });
 		this.logoFileInput = this.page.locator('input[type="file"]');
-		this.logoErrorMessage = this.page.getByText(
-			"Logo must be an image file (jpeg, png, jpg, gif, svg, webp).",
-		);
+		this.logoErrorMessage = this.page.getByText("Logo must be an image file", { exact: false });
 		this.cancelButton = this.page.getByRole("button", { name: "Cancel" });
 		this.createBrandButton = this.page.getByRole("button", { name: "Create Brand" });
 		this.successToast = this.page.getByText("Brand created successfully");
 	}
 
 	async goToPage(): Promise<void> {
-		await this.page.goto("/admin/products/brands/create");
+		await this.gotoAndWaitForReady("/admin/products/brands/create", async () => {
+			// This Nuxt form can still reset fields until the initial client-side requests settle.
+			await this.page.waitForLoadState("networkidle");
+			await expect(this.brandNameField).toBeEditable();
+			await expect(this.createBrandButton).toBeDisabled();
+		});
 	}
 
 	async verifyPage(): Promise<void> {
