@@ -1,5 +1,18 @@
-import { adminTest as test } from "../../fixtures/pomManager";
+import { adminTest as test, expect } from "../../fixtures/pomManager";
 import { createBrandInfoFaker } from "../../factories/brand.factory";
+
+const validLogoCases = [
+	{
+		fileName: "cat.png",
+		filePath: "E2E/assets/cat.png",
+		logoType: "PNG",
+	},
+	{
+		fileName: "cat.jpg",
+		filePath: "E2E/assets/cat.jpg",
+		logoType: "JPG",
+	},
+] as const;
 
 test.describe("Brand create page coverage", () => {
 	let createdBrandNames: string[];
@@ -41,29 +54,35 @@ test.describe("Brand create page coverage", () => {
 		});
 	});
 
-	test.skip("Create brand with optional fields and a valid logo", async ({ pomManager }) => {
-		const brand = createBrandInfoFaker();
-		createdBrandNames.push(brand.name);
+	for (const logoCase of validLogoCases) {
+		test(`Create brand with optional fields and a valid ${logoCase.logoType} logo`, async ({
+			pomManager,
+		}) => {
+			const brand = createBrandInfoFaker();
+			createdBrandNames.push(brand.name);
 
-		await pomManager.brandCreatePage.fillBrandName(brand.name);
-		await pomManager.brandCreatePage.fillDescription(brand.description);
-		await pomManager.brandCreatePage.fillWebsiteUrl(brand.websiteUrl);
-		await pomManager.brandCreatePage.fillSortOrder(brand.sortOrder);
-		await pomManager.brandCreatePage.selectStatus("Published");
-		await pomManager.brandCreatePage.clickFeaturedBrandToggle();
-		await pomManager.brandCreatePage.uploadBrandLogo("Valid");
-		await pomManager.brandCreatePage.submitAndWaitForSuccess();
+			await pomManager.brandCreatePage.fillBrandName(brand.name);
+			await pomManager.brandCreatePage.fillDescription(brand.description);
+			await pomManager.brandCreatePage.fillWebsiteUrl(brand.websiteUrl);
+			await pomManager.brandCreatePage.fillSortOrder(brand.sortOrder);
+			await pomManager.brandCreatePage.selectStatus("Published");
+			await pomManager.brandCreatePage.clickFeaturedBrandToggle();
+			await pomManager.brandCreatePage.uploadBrandLogo(logoCase.filePath);
+			await pomManager.brandCreatePage.verifyUploadedLogoFileName(logoCase.fileName);
+			await pomManager.brandCreatePage.submitAndWaitForSuccess();
+			await pomManager.brandCreatePage.verifyCreatedSuccessMessage();
 
-		await pomManager.brandsPage.goToPage();
-		await pomManager.brandsPage.searchBrand(brand.name);
-		await pomManager.brandsPage.verifyBrandVisible(brand.name);
-		await pomManager.brandsPage.verifyBrandRowValues(brand.name, {
-			status: "published",
-			featured: "Yes",
-			website: brand.websiteUrl,
-			order: brand.sortOrder,
+			await pomManager.brandsPage.goToPage();
+			await pomManager.brandsPage.searchBrand(brand.name);
+			await pomManager.brandsPage.verifyBrandVisible(brand.name);
+			await pomManager.brandsPage.verifyBrandRowValues(brand.name, {
+				status: "published",
+				featured: "Yes",
+				website: brand.websiteUrl,
+				order: brand.sortOrder,
+			});
 		});
-	});
+	}
 
 	test("Cancel brand creation without saving", async ({ pomManager }) => {
 		const brand = createBrandInfoFaker();
@@ -105,9 +124,61 @@ test.describe("Brand create page coverage", () => {
 		const brand = createBrandInfoFaker();
 
 		await pomManager.brandCreatePage.fillBrandName(brand.name);
-		await pomManager.brandCreatePage.uploadBrandLogo("Invalid");
+		await pomManager.brandCreatePage.uploadBrandLogo("E2E/assets/textFile.txt");
+		await pomManager.brandCreatePage.verifyUploadedLogoFileName("textFile.txt");
 		await pomManager.brandCreatePage.clickCreateBrandButton();
 		await pomManager.brandCreatePage.verifyInvalidLogoError();
+	});
+
+	test("Reject GIF logo uploads", async ({ pomManager }) => {
+		const brand = createBrandInfoFaker();
+
+		await pomManager.brandCreatePage.fillBrandName(brand.name);
+		await pomManager.brandCreatePage.uploadBrandLogo("E2E/assets/sample.gif");
+		await pomManager.brandCreatePage.verifyUploadedLogoFileName("sample.gif");
+
+		const response = await pomManager.brandCreatePage.submitAndWaitForCreateResponse();
+
+		expect(response.status()).toBe(422);
+		await pomManager.brandCreatePage.verifyInvalidLogoError("Logo must be an image file (jpeg, png, jpg).");
+
+		await pomManager.brandsPage.goToPage();
+		await pomManager.brandsPage.searchBrand(brand.name);
+		await pomManager.brandsPage.verifyNoBrandsFound();
+	});
+
+	test("Reject oversized JPG logo uploads", async ({ pomManager }) => {
+		const brand = createBrandInfoFaker();
+
+		await pomManager.brandCreatePage.fillBrandName(brand.name);
+		await pomManager.brandCreatePage.uploadBrandLogo("E2E/assets/9MB_picture.jpg");
+		await pomManager.brandCreatePage.verifyUploadedLogoFileName("9MB_picture.jpg");
+
+		const response = await pomManager.brandCreatePage.submitAndWaitForCreateResponse();
+
+		expect(response.status()).toBe(422);
+		await pomManager.brandCreatePage.verifyInvalidLogoError("Logo file size cannot exceed 2MB.");
+
+		await pomManager.brandsPage.goToPage();
+		await pomManager.brandsPage.searchBrand(brand.name);
+		await pomManager.brandsPage.verifyNoBrandsFound();
+	});
+
+	test("Block JFIF logo uploads without creating the brand", async ({ pomManager }) => {
+		const brand = createBrandInfoFaker();
+
+		await pomManager.brandCreatePage.fillBrandName(brand.name);
+		await pomManager.brandCreatePage.uploadBrandLogo("E2E/assets/cat.jfif");
+		await pomManager.brandCreatePage.verifyUploadedLogoFileName("cat.jfif");
+
+		const response = await pomManager.brandCreatePage.submitAndWaitForCreateResponse();
+
+		expect(response.ok()).toBeFalsy();
+		await pomManager.brandCreatePage.verifyPage();
+
+		await pomManager.brandsPage.goToPage();
+		await pomManager.brandsPage.searchBrand(brand.name);
+		await pomManager.brandsPage.verifyNoBrandsFound();
 	});
 
 	test("Reject duplicate brand names", async ({ pomManager }) => {
@@ -125,6 +196,5 @@ test.describe("Brand create page coverage", () => {
 	});
 
 	// Additional create-page coverage to automate next:
-	// - Reject logo uploads larger than 10MB
 	// - Support drag-and-drop logo upload during brand creation
 });
