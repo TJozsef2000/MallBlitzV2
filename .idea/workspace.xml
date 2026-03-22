@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="986cb592-ad3a-47c3-ab41-3ea3e41569db" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/E2E/assets/test-avatar.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/assets/test-avatar.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/E2E/pages/Admin/BrandCreatePage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/pages/Admin/BrandCreatePage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/E2E/pages/Admin/BrandsPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/pages/Admin/BrandsPage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/E2E/tests/Email-flows.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/tests/Email-flows.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/E2E/tests/admin/Brand-create.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/tests/admin/Brand-create.spec.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,9 +19,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="3Azhdb0ruQfSuezf0yjIOUfU1Ky" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -28,16 +34,23 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/Users/Jozsi/WebstormProjects/MallBlitzV2",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\Users\\Jozsi\\WebstormProjects\\MallBlitzV2\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.30387.83" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-WS-251.26927.40" />
       </set>
     </attachedChunks>
   </component>
@@ -49,7 +62,12 @@
       <option name="presentableId" value="Default" />
       <updated>1773601397118</updated>
       <workItem from="1773601399990" duration="43000" />
+      <workItem from="1774095619228" duration="3982000" />
+      <workItem from="1774170141686" duration="1070000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

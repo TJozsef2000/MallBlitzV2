@@ -69,7 +69,10 @@ export class BrandsPage extends BasePage {
 	}
 
 	async goToPage(): Promise<void> {
-		await this.page.goto("/admin/products/brands", { waitUntil: "domcontentloaded" });
+		await this.gotoAndWaitForReady("/admin/products/brands", async () => {
+			await this.page.waitForLoadState("networkidle");
+			await this.table.waitForIdle();
+		});
 	}
 
 	async verifyPage(): Promise<void> {

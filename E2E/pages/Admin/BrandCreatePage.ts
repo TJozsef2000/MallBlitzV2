@@ -1,8 +1,7 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { expect, Locator, Page, Response } from "@playwright/test";
 import { BasePage } from "../BasePage";
 
 type BrandStatus = "Published" | "Draft";
-type UploadState = "Valid" | "Invalid";
 
 export class BrandCreatePage extends BasePage {
 	protected readonly brandNameField: Locator;
@@ -15,7 +14,6 @@ export class BrandCreatePage extends BasePage {
 	protected readonly sortOrderErrorMessage: Locator;
 	protected readonly featuredBrandToggle: Locator;
 	protected readonly logoFileInput: Locator;
-	protected readonly logoErrorMessage: Locator;
 	protected readonly cancelButton: Locator;
 	protected readonly createBrandButton: Locator;
 	protected readonly successToast: Locator;
@@ -35,7 +33,6 @@ export class BrandCreatePage extends BasePage {
 		this.sortOrderErrorMessage = this.page.getByText("Sort order must be 0 or greater");
 		this.featuredBrandToggle = this.page.getByRole("switch", { name: "Toggle switch" });
 		this.logoFileInput = this.page.locator('input[type="file"]');
-		this.logoErrorMessage = this.page.getByText("Logo must be an image file", { exact: false });
 		this.cancelButton = this.page.getByRole("button", { name: "Cancel" });
 		this.createBrandButton = this.page.getByRole("button", { name: "Create Brand" });
 		this.successToast = this.page.getByText("Brand created successfully");
@@ -78,8 +75,7 @@ export class BrandCreatePage extends BasePage {
 		await this.featuredBrandToggle.click();
 	}
 
-	async uploadBrandLogo(state: UploadState): Promise<void> {
-		const filePath = state === "Valid" ? "E2E/assets/test-avatar.jpg" : "E2E/assets/textFile.txt";
+	async uploadBrandLogo(filePath: string): Promise<void> {
 		await this.logoFileInput.setInputFiles(filePath);
 	}
 
@@ -98,6 +94,15 @@ export class BrandCreatePage extends BasePage {
 			}),
 			this.createBrandButton.click(),
 		]);
+	}
+
+	async submitAndWaitForCreateResponse(): Promise<Response> {
+		const createResponse = this.page.waitForResponse(
+			(response) =>
+				response.url().includes("/api/ecommerce/brands") && response.request().method() === "POST",
+		);
+		await this.createBrandButton.click();
+		return await createResponse;
 	}
 
 	async verifyCreateButtonDisabled(): Promise<void> {
@@ -124,8 +129,12 @@ export class BrandCreatePage extends BasePage {
 		await expect(this.page.getByText("A brand with this name already exists.")).toBeVisible();
 	}
 
-	async verifyInvalidLogoError(): Promise<void> {
-		await expect(this.logoErrorMessage).toBeVisible();
+	async verifyInvalidLogoError(message = "Logo must be an image file"): Promise<void> {
+		await expect(this.page.getByText(message, { exact: false })).toBeVisible();
+	}
+
+	async verifyUploadedLogoFileName(fileName: string): Promise<void> {
+		await expect(this.page.getByText(fileName, { exact: true })).toBeVisible();
 	}
 
 	async verifyCreatedSuccessMessage(): Promise<void> {
