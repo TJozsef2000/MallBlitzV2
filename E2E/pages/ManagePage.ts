@@ -1,11 +1,11 @@
 import { Page } from "@playwright/test";
 import { AdminHeaderComponent } from "./Admin/Components/AdminHeaderComponent";
 import { AdminLeftSideBarComponent } from "./Admin/Components/AdminLeftSidebarComponent";
-import { BrandCreatePage } from "./Admin/BrandCreatePage";
-import { BrandsPage } from "./Admin/BrandsPage";
+import { BrandCreatePage } from "./Admin/Brands/BrandCreatePage";
+import { BrandsPage } from "./Admin/Brands/BrandsPage";
 import { AdminDashboardPage } from "./Admin/DashboardPage";
-import { UserCreatePage } from "./Admin/UserCreatePage";
-import { UsersPage } from "./Admin/UsersPage";
+import { UserCreatePage } from "./Admin/Users/UserCreatePage";
+import { UsersPage } from "./Admin/Users/UsersPage";
 import { BlogPage } from "./BlogPage";
 import { FooterComponent } from "./components/FooterComponent";
 import { HeaderComponent } from "./components/HeaderComponent";

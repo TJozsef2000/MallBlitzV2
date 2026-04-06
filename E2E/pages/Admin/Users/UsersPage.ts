@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { AdminDataTableComponent } from "./Components/AdminDataTableComponent";
-import { AdminDataTableFilterModalComponent } from "./Components/AdminDataTableFilterModalComponent";
-import { BasePage } from "../BasePage";
+import { AdminDataTableComponent } from "../Components/AdminDataTableComponent";
+import { AdminDataTableFilterModalComponent } from "../Components/AdminDataTableFilterModalComponent";
+import { BasePage } from "../../BasePage";
 
 export enum FilterSelectOperator {
 	Equals = "Equals",

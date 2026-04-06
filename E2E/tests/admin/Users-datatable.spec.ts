@@ -1,6 +1,6 @@
 import { adminTest as test, expect } from "../../fixtures/pomManager";
 import { testUserData } from "../../helpers/env.helper";
-import { FilterSelectField, FilterSelectOperator } from "../../pages/Admin/UsersPage";
+import { FilterSelectField, FilterSelectOperator } from "../../pages/Admin/Users/UsersPage";
 
 test.describe("Users datatable coverage", () => {
 	const presetUserEmail = testUserData.email;

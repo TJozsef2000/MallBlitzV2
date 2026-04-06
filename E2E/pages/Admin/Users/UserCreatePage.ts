@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { createRegisterInfoFaker } from "../../factories/register.factory";
-import { BasePage } from "../BasePage";
+import { createRegisterInfoFaker } from "../../../factories/register.factory";
+import { BasePage } from "../../BasePage";
 
 export class UserCreatePage extends BasePage {
 	// === User detials ===

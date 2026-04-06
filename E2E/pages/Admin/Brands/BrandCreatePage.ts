@@ -1,5 +1,5 @@
 import { expect, Locator, Page, Response } from "@playwright/test";
-import { BasePage } from "../BasePage";
+import { BasePage } from "../../BasePage";
 
 type BrandStatus = "Published" | "Draft";
 

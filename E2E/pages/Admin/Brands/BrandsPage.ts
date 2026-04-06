@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { AdminDataTableComponent } from "./Components/AdminDataTableComponent";
-import { BasePage } from "../BasePage";
+import { AdminDataTableComponent } from "../Components/AdminDataTableComponent";
+import { BasePage } from "../../BasePage";
 
 interface BrandRowExpectations {
 	status?: string;
