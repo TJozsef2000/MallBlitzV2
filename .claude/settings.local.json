@@ -1,8 +1,5 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(cmd //c \"npx playwright test E2E/tests/admin/_blog-discovery.spec.ts --reporter=list --grep \\\\\"row actions\\\\\"\")",
-      "Bash(cmd //c \"npx playwright test E2E/tests/admin/_blog-discovery.spec.ts --reporter=list -g \\\\\"row actions\\\\\"\")"
-    ]
+    "allow": ["Bash(*)"]
   }
 }
