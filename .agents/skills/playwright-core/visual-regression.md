@@ -40,40 +40,42 @@ npx playwright test --update-snapshots
 Playwright compares a screenshot taken during the test against a stored baseline (golden) image. On first run, the baseline is created. On subsequent runs, differences cause the test to fail with a visual diff report.
 
 **TypeScript**
+
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('homepage renders correctly', async ({ page }) => {
-  await page.goto('/');
+test("homepage renders correctly", async ({ page }) => {
+	await page.goto("/");
 
-  // Full page screenshot comparison
-  await expect(page).toHaveScreenshot('homepage.png');
+	// Full page screenshot comparison
+	await expect(page).toHaveScreenshot("homepage.png");
 });
 
-test('pricing card matches design', async ({ page }) => {
-  await page.goto('/pricing');
+test("pricing card matches design", async ({ page }) => {
+	await page.goto("/pricing");
 
-  // Element-level screenshot -- scoped to a single component
-  const card = page.getByTestId('pro-plan-card');
-  await expect(card).toHaveScreenshot('pro-plan-card.png');
+	// Element-level screenshot -- scoped to a single component
+	const card = page.getByTestId("pro-plan-card");
+	await expect(card).toHaveScreenshot("pro-plan-card.png");
 });
 ```
 
 **JavaScript**
+
 ```javascript
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test('homepage renders correctly', async ({ page }) => {
-  await page.goto('/');
+test("homepage renders correctly", async ({ page }) => {
+	await page.goto("/");
 
-  await expect(page).toHaveScreenshot('homepage.png');
+	await expect(page).toHaveScreenshot("homepage.png");
 });
 
-test('pricing card matches design', async ({ page }) => {
-  await page.goto('/pricing');
+test("pricing card matches design", async ({ page }) => {
+	await page.goto("/pricing");
 
-  const card = page.getByTestId('pro-plan-card');
-  await expect(card).toHaveScreenshot('pro-plan-card.png');
+	const card = page.getByTestId("pro-plan-card");
+	await expect(card).toHaveScreenshot("pro-plan-card.png");
 });
 ```
 
@@ -94,74 +96,76 @@ tests/
 
 Three knobs control comparison sensitivity:
 
-| Option | What it controls | Good default |
-|---|---|---|
-| `maxDiffPixels` | Absolute number of pixels that can differ | `100` for full pages, `10` for components |
-| `maxDiffPixelRatio` | Fraction of total pixels that can differ (0-1) | `0.01` (1%) for full pages |
-| `threshold` | Per-pixel color difference tolerance (0-1) | `0.2` for most UIs, `0.1` for design systems |
+| Option              | What it controls                               | Good default                                 |
+| ------------------- | ---------------------------------------------- | -------------------------------------------- |
+| `maxDiffPixels`     | Absolute number of pixels that can differ      | `100` for full pages, `10` for components    |
+| `maxDiffPixelRatio` | Fraction of total pixels that can differ (0-1) | `0.01` (1%) for full pages                   |
+| `threshold`         | Per-pixel color difference tolerance (0-1)     | `0.2` for most UIs, `0.1` for design systems |
 
 **TypeScript**
+
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('dashboard allows minor rendering variance', async ({ page }) => {
-  await page.goto('/dashboard');
+test("dashboard allows minor rendering variance", async ({ page }) => {
+	await page.goto("/dashboard");
 
-  // Allow up to 1% of pixels to differ
-  await expect(page).toHaveScreenshot('dashboard.png', {
-    maxDiffPixelRatio: 0.01,
-  });
+	// Allow up to 1% of pixels to differ
+	await expect(page).toHaveScreenshot("dashboard.png", {
+		maxDiffPixelRatio: 0.01,
+	});
 });
 
-test('icon renders pixel-perfect', async ({ page }) => {
-  await page.goto('/icons');
+test("icon renders pixel-perfect", async ({ page }) => {
+	await page.goto("/icons");
 
-  // Strict: zero tolerance
-  await expect(page.getByTestId('logo')).toHaveScreenshot('logo.png', {
-    maxDiffPixels: 0,
-    threshold: 0,
-  });
+	// Strict: zero tolerance
+	await expect(page.getByTestId("logo")).toHaveScreenshot("logo.png", {
+		maxDiffPixels: 0,
+		threshold: 0,
+	});
 });
 
-test('chart allows anti-aliasing differences', async ({ page }) => {
-  await page.goto('/analytics');
+test("chart allows anti-aliasing differences", async ({ page }) => {
+	await page.goto("/analytics");
 
-  // Per-pixel color threshold + absolute pixel count cap
-  await expect(page.getByTestId('revenue-chart')).toHaveScreenshot('revenue-chart.png', {
-    threshold: 0.3,
-    maxDiffPixels: 200,
-  });
+	// Per-pixel color threshold + absolute pixel count cap
+	await expect(page.getByTestId("revenue-chart")).toHaveScreenshot("revenue-chart.png", {
+		threshold: 0.3,
+		maxDiffPixels: 200,
+	});
 });
 ```
 
 **JavaScript**
+
 ```javascript
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test('dashboard allows minor rendering variance', async ({ page }) => {
-  await page.goto('/dashboard');
+test("dashboard allows minor rendering variance", async ({ page }) => {
+	await page.goto("/dashboard");
 
-  await expect(page).toHaveScreenshot('dashboard.png', {
-    maxDiffPixelRatio: 0.01,
-  });
+	await expect(page).toHaveScreenshot("dashboard.png", {
+		maxDiffPixelRatio: 0.01,
+	});
 });
 
-test('icon renders pixel-perfect', async ({ page }) => {
-  await page.goto('/icons');
+test("icon renders pixel-perfect", async ({ page }) => {
+	await page.goto("/icons");
 
-  await expect(page.getByTestId('logo')).toHaveScreenshot('logo.png', {
-    maxDiffPixels: 0,
-    threshold: 0,
-  });
+	await expect(page.getByTestId("logo")).toHaveScreenshot("logo.png", {
+		maxDiffPixels: 0,
+		threshold: 0,
+	});
 });
 
-test('chart allows anti-aliasing differences', async ({ page }) => {
-  await page.goto('/analytics');
+test("chart allows anti-aliasing differences", async ({ page }) => {
+	await page.goto("/analytics");
 
-  await expect(page.getByTestId('revenue-chart')).toHaveScreenshot('revenue-chart.png', {
-    threshold: 0.3,
-    maxDiffPixels: 200,
-  });
+	await expect(page.getByTestId("revenue-chart")).toHaveScreenshot("revenue-chart.png", {
+		threshold: 0.3,
+		maxDiffPixels: 200,
+	});
 });
 ```
 
@@ -169,16 +173,16 @@ test('chart allows anti-aliasing differences', async ({ page }) => {
 
 ```typescript
 // playwright.config.ts
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  expect: {
-    toHaveScreenshot: {
-      maxDiffPixelRatio: 0.01,
-      threshold: 0.2,
-      animations: 'disabled',
-    },
-  },
+	expect: {
+		toHaveScreenshot: {
+			maxDiffPixelRatio: 0.01,
+			threshold: 0.2,
+			animations: "disabled",
+		},
+	},
 });
 ```
 
@@ -188,51 +192,53 @@ export default defineConfig({
 **Avoid when**: Neither -- use both strategically.
 
 **TypeScript**
+
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('full page screenshot catches layout shifts', async ({ page }) => {
-  await page.goto('/');
+test("full page screenshot catches layout shifts", async ({ page }) => {
+	await page.goto("/");
 
-  // Captures the visible viewport
-  await expect(page).toHaveScreenshot('homepage-viewport.png');
+	// Captures the visible viewport
+	await expect(page).toHaveScreenshot("homepage-viewport.png");
 
-  // Captures the entire scrollable page
-  await expect(page).toHaveScreenshot('homepage-full.png', {
-    fullPage: true,
-  });
+	// Captures the entire scrollable page
+	await expect(page).toHaveScreenshot("homepage-full.png", {
+		fullPage: true,
+	});
 });
 
-test('element screenshot isolates component changes', async ({ page }) => {
-  await page.goto('/pricing');
+test("element screenshot isolates component changes", async ({ page }) => {
+	await page.goto("/pricing");
 
-  // Only the pricing table -- immune to header/footer changes
-  await expect(page.getByRole('table')).toHaveScreenshot('pricing-table.png');
+	// Only the pricing table -- immune to header/footer changes
+	await expect(page.getByRole("table")).toHaveScreenshot("pricing-table.png");
 
-  // A specific card within the page
-  await expect(page.getByTestId('enterprise-card')).toHaveScreenshot('enterprise-card.png');
+	// A specific card within the page
+	await expect(page.getByTestId("enterprise-card")).toHaveScreenshot("enterprise-card.png");
 });
 ```
 
 **JavaScript**
+
 ```javascript
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test('full page screenshot catches layout shifts', async ({ page }) => {
-  await page.goto('/');
+test("full page screenshot catches layout shifts", async ({ page }) => {
+	await page.goto("/");
 
-  await expect(page).toHaveScreenshot('homepage-viewport.png');
+	await expect(page).toHaveScreenshot("homepage-viewport.png");
 
-  await expect(page).toHaveScreenshot('homepage-full.png', {
-    fullPage: true,
-  });
+	await expect(page).toHaveScreenshot("homepage-full.png", {
+		fullPage: true,
+	});
 });
 
-test('element screenshot isolates component changes', async ({ page }) => {
-  await page.goto('/pricing');
+test("element screenshot isolates component changes", async ({ page }) => {
+	await page.goto("/pricing");
 
-  await expect(page.getByRole('table')).toHaveScreenshot('pricing-table.png');
-  await expect(page.getByTestId('enterprise-card')).toHaveScreenshot('enterprise-card.png');
+	await expect(page.getByRole("table")).toHaveScreenshot("pricing-table.png");
+	await expect(page.getByTestId("enterprise-card")).toHaveScreenshot("enterprise-card.png");
 });
 ```
 
@@ -246,81 +252,83 @@ test('element screenshot isolates component changes', async ({ page }) => {
 The `mask` option overlays a solid-colored box over specified locators before taking the screenshot. The masked region is excluded from comparison.
 
 **TypeScript**
+
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('dashboard with masked dynamic content', async ({ page }) => {
-  await page.goto('/dashboard');
+test("dashboard with masked dynamic content", async ({ page }) => {
+	await page.goto("/dashboard");
 
-  await expect(page).toHaveScreenshot('dashboard.png', {
-    mask: [
-      page.getByTestId('current-time'),
-      page.getByTestId('user-avatar'),
-      page.getByTestId('live-visitor-count'),
-      page.locator('.ad-banner'),
-    ],
-    maskColor: '#FF00FF', // visible magenta -- makes it obvious what's masked in reviews
-  });
+	await expect(page).toHaveScreenshot("dashboard.png", {
+		mask: [
+			page.getByTestId("current-time"),
+			page.getByTestId("user-avatar"),
+			page.getByTestId("live-visitor-count"),
+			page.locator(".ad-banner"),
+		],
+		maskColor: "#FF00FF", // visible magenta -- makes it obvious what's masked in reviews
+	});
 });
 
-test('feed page with relative timestamps', async ({ page }) => {
-  await page.goto('/feed');
+test("feed page with relative timestamps", async ({ page }) => {
+	await page.goto("/feed");
 
-  // Mask all relative time elements at once
-  await expect(page).toHaveScreenshot('feed.png', {
-    mask: [page.locator('time[datetime]')],
-  });
+	// Mask all relative time elements at once
+	await expect(page).toHaveScreenshot("feed.png", {
+		mask: [page.locator("time[datetime]")],
+	});
 });
 
-test('profile page with user-generated content', async ({ page }) => {
-  await page.goto('/profile/test-user');
+test("profile page with user-generated content", async ({ page }) => {
+	await page.goto("/profile/test-user");
 
-  await expect(page).toHaveScreenshot('profile.png', {
-    mask: [
-      page.getByRole('img', { name: 'Profile photo' }),
-      page.getByTestId('last-login'),
-      page.getByTestId('member-since'),
-    ],
-  });
+	await expect(page).toHaveScreenshot("profile.png", {
+		mask: [
+			page.getByRole("img", { name: "Profile photo" }),
+			page.getByTestId("last-login"),
+			page.getByTestId("member-since"),
+		],
+	});
 });
 ```
 
 **JavaScript**
+
 ```javascript
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test('dashboard with masked dynamic content', async ({ page }) => {
-  await page.goto('/dashboard');
+test("dashboard with masked dynamic content", async ({ page }) => {
+	await page.goto("/dashboard");
 
-  await expect(page).toHaveScreenshot('dashboard.png', {
-    mask: [
-      page.getByTestId('current-time'),
-      page.getByTestId('user-avatar'),
-      page.getByTestId('live-visitor-count'),
-      page.locator('.ad-banner'),
-    ],
-    maskColor: '#FF00FF',
-  });
+	await expect(page).toHaveScreenshot("dashboard.png", {
+		mask: [
+			page.getByTestId("current-time"),
+			page.getByTestId("user-avatar"),
+			page.getByTestId("live-visitor-count"),
+			page.locator(".ad-banner"),
+		],
+		maskColor: "#FF00FF",
+	});
 });
 
-test('feed page with relative timestamps', async ({ page }) => {
-  await page.goto('/feed');
+test("feed page with relative timestamps", async ({ page }) => {
+	await page.goto("/feed");
 
-  await expect(page).toHaveScreenshot('feed.png', {
-    mask: [page.locator('time[datetime]')],
-  });
+	await expect(page).toHaveScreenshot("feed.png", {
+		mask: [page.locator("time[datetime]")],
+	});
 });
 
-test('profile page with user-generated content', async ({ page }) => {
-  await page.goto('/profile/test-user');
+test("profile page with user-generated content", async ({ page }) => {
+	await page.goto("/profile/test-user");
 
-  await expect(page).toHaveScreenshot('profile.png', {
-    mask: [
-      page.getByRole('img', { name: 'Profile photo' }),
-      page.getByTestId('last-login'),
-      page.getByTestId('member-since'),
-    ],
-  });
+	await expect(page).toHaveScreenshot("profile.png", {
+		mask: [
+			page.getByRole("img", { name: "Profile photo" }),
+			page.getByTestId("last-login"),
+			page.getByTestId("member-since"),
+		],
+	});
 });
 ```
 
@@ -329,17 +337,17 @@ test('profile page with user-generated content', async ({ page }) => {
 When masking is not sufficient (e.g., content affects layout), inject JavaScript to freeze the content:
 
 ```typescript
-test('freeze clock before screenshot', async ({ page }) => {
-  await page.goto('/dashboard');
+test("freeze clock before screenshot", async ({ page }) => {
+	await page.goto("/dashboard");
 
-  // Replace all dynamic timestamps with a fixed value
-  await page.evaluate(() => {
-    document.querySelectorAll('[data-testid="timestamp"]').forEach((el) => {
-      el.textContent = 'Jan 1, 2025 12:00 PM';
-    });
-  });
+	// Replace all dynamic timestamps with a fixed value
+	await page.evaluate(() => {
+		document.querySelectorAll('[data-testid="timestamp"]').forEach((el) => {
+			el.textContent = "Jan 1, 2025 12:00 PM";
+		});
+	});
 
-  await expect(page).toHaveScreenshot('dashboard-frozen.png');
+	await expect(page).toHaveScreenshot("dashboard-frozen.png");
 });
 ```
 
@@ -349,29 +357,31 @@ test('freeze clock before screenshot', async ({ page }) => {
 **Avoid when**: You are explicitly testing the animation itself (rare).
 
 **TypeScript**
+
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('page renders without animation interference', async ({ page }) => {
-  await page.goto('/');
+test("page renders without animation interference", async ({ page }) => {
+	await page.goto("/");
 
-  // Disables CSS animations and transitions before screenshotting
-  await expect(page).toHaveScreenshot('homepage.png', {
-    animations: 'disabled',
-  });
+	// Disables CSS animations and transitions before screenshotting
+	await expect(page).toHaveScreenshot("homepage.png", {
+		animations: "disabled",
+	});
 });
 ```
 
 **JavaScript**
+
 ```javascript
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test('page renders without animation interference', async ({ page }) => {
-  await page.goto('/');
+test("page renders without animation interference", async ({ page }) => {
+	await page.goto("/");
 
-  await expect(page).toHaveScreenshot('homepage.png', {
-    animations: 'disabled',
-  });
+	await expect(page).toHaveScreenshot("homepage.png", {
+		animations: "disabled",
+	});
 });
 ```
 
@@ -379,18 +389,19 @@ test('page renders without animation interference', async ({ page }) => {
 
 ```typescript
 // playwright.config.ts
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  expect: {
-    toHaveScreenshot: {
-      animations: 'disabled',
-    },
-  },
+	expect: {
+		toHaveScreenshot: {
+			animations: "disabled",
+		},
+	},
 });
 ```
 
 When `animations: 'disabled'` is set, Playwright:
+
 1. Injects a stylesheet that sets `* { animation-duration: 0s !important; transition-duration: 0s !important; }`.
 2. Waits for any currently running animations to finish (forces them to their end state).
 3. Takes the screenshot.
@@ -398,16 +409,16 @@ When `animations: 'disabled'` is set, Playwright:
 For JavaScript-driven animations (requestAnimationFrame, GSAP, Framer Motion), you may also need to wait for stability:
 
 ```typescript
-test('page with JS animations', async ({ page }) => {
-  await page.goto('/animated-landing');
+test("page with JS animations", async ({ page }) => {
+	await page.goto("/animated-landing");
 
-  // Wait for the hero animation to settle
-  await page.getByTestId('hero-section').waitFor({ state: 'visible' });
-  await page.waitForTimeout(500); // last resort for JS animations -- use sparingly
+	// Wait for the hero animation to settle
+	await page.getByTestId("hero-section").waitFor({ state: "visible" });
+	await page.waitForTimeout(500); // last resort for JS animations -- use sparingly
 
-  await expect(page).toHaveScreenshot('landing.png', {
-    animations: 'disabled',
-  });
+	await expect(page).toHaveScreenshot("landing.png", {
+		animations: "disabled",
+	});
 });
 ```
 
@@ -430,18 +441,22 @@ npx playwright test --project=chromium --update-snapshots
 **Workflow for reviewing snapshot changes:**
 
 1. Run tests and observe failures in the HTML report:
+
    ```bash
    npx playwright test
    npx playwright show-report
    ```
+
    The report shows the expected image, actual image, and a diff image side-by-side.
 
 2. If the changes are intentional, update the snapshots:
+
    ```bash
    npx playwright test --update-snapshots
    ```
 
 3. Review the updated snapshots in your diff tool before committing:
+
    ```bash
    git diff --name-only  # see which snapshot files changed
    ```
@@ -451,22 +466,23 @@ npx playwright test --project=chromium --update-snapshots
 **Tip**: Never run `--update-snapshots` in CI. Always update locally, review the diffs, and commit the new baselines.
 
 **TypeScript -- helper for controlled updates**
+
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 // Tag visual tests so you can update them selectively
-test('homepage visual @visual', async ({ page }) => {
-  await page.goto('/');
-  await expect(page).toHaveScreenshot('homepage.png', {
-    animations: 'disabled',
-  });
+test("homepage visual @visual", async ({ page }) => {
+	await page.goto("/");
+	await expect(page).toHaveScreenshot("homepage.png", {
+		animations: "disabled",
+	});
 });
 
-test('pricing visual @visual', async ({ page }) => {
-  await page.goto('/pricing');
-  await expect(page).toHaveScreenshot('pricing.png', {
-    animations: 'disabled',
-  });
+test("pricing visual @visual", async ({ page }) => {
+	await page.goto("/pricing");
+	await expect(page).toHaveScreenshot("pricing.png", {
+		animations: "disabled",
+	});
 });
 ```
 
@@ -483,62 +499,64 @@ npx playwright test --grep @visual --update-snapshots
 Playwright automatically separates snapshots by project name. Each browser gets its own baseline file. This is correct behavior -- browsers render fonts, shadows, and anti-aliasing differently.
 
 **TypeScript**
+
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: './tests',
-  expect: {
-    toHaveScreenshot: {
-      animations: 'disabled',
-      maxDiffPixelRatio: 0.01,
-    },
-  },
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-  ],
+	testDir: "./tests",
+	expect: {
+		toHaveScreenshot: {
+			animations: "disabled",
+			maxDiffPixelRatio: 0.01,
+		},
+	},
+	projects: [
+		{
+			name: "chromium",
+			use: { ...devices["Desktop Chrome"] },
+		},
+		{
+			name: "firefox",
+			use: { ...devices["Desktop Firefox"] },
+		},
+		{
+			name: "webkit",
+			use: { ...devices["Desktop Safari"] },
+		},
+	],
 });
 ```
 
 ```typescript
 // tests/homepage.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('homepage renders correctly per browser', async ({ page }) => {
-  await page.goto('/');
+test("homepage renders correctly per browser", async ({ page }) => {
+	await page.goto("/");
 
-  // Playwright creates separate baselines per project:
-  //   homepage.spec.ts-snapshots/homepage-chromium-linux.png
-  //   homepage.spec.ts-snapshots/homepage-firefox-linux.png
-  //   homepage.spec.ts-snapshots/homepage-webkit-linux.png
-  await expect(page).toHaveScreenshot('homepage.png', {
-    animations: 'disabled',
-  });
+	// Playwright creates separate baselines per project:
+	//   homepage.spec.ts-snapshots/homepage-chromium-linux.png
+	//   homepage.spec.ts-snapshots/homepage-firefox-linux.png
+	//   homepage.spec.ts-snapshots/homepage-webkit-linux.png
+	await expect(page).toHaveScreenshot("homepage.png", {
+		animations: "disabled",
+	});
 });
 ```
 
 **JavaScript**
+
 ```javascript
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test('homepage renders correctly per browser', async ({ page }) => {
-  await page.goto('/');
+test("homepage renders correctly per browser", async ({ page }) => {
+	await page.goto("/");
 
-  await expect(page).toHaveScreenshot('homepage.png', {
-    animations: 'disabled',
-  });
+	await expect(page).toHaveScreenshot("homepage.png", {
+		animations: "disabled",
+	});
 });
 ```
 
@@ -546,26 +564,26 @@ test('homepage renders correctly per browser', async ({ page }) => {
 
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  projects: [
-    {
-      name: 'visual',
-      testMatch: '**/*.visual.spec.ts',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'chromium',
-      testIgnore: '**/*.visual.spec.ts',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'firefox',
-      testIgnore: '**/*.visual.spec.ts',
-      use: { ...devices['Desktop Firefox'] },
-    },
-  ],
+	projects: [
+		{
+			name: "visual",
+			testMatch: "**/*.visual.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
+		{
+			name: "chromium",
+			testIgnore: "**/*.visual.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
+		{
+			name: "firefox",
+			testIgnore: "**/*.visual.spec.ts",
+			use: { ...devices["Desktop Firefox"] },
+		},
+	],
 });
 ```
 
@@ -575,48 +593,50 @@ export default defineConfig({
 **Avoid when**: The page has a single fixed-width layout.
 
 **TypeScript**
+
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 const viewports = [
-  { name: 'mobile', width: 375, height: 812 },
-  { name: 'tablet', width: 768, height: 1024 },
-  { name: 'desktop', width: 1440, height: 900 },
+	{ name: "mobile", width: 375, height: 812 },
+	{ name: "tablet", width: 768, height: 1024 },
+	{ name: "desktop", width: 1440, height: 900 },
 ];
 
 for (const viewport of viewports) {
-  test(`homepage at ${viewport.name} (${viewport.width}x${viewport.height})`, async ({ page }) => {
-    await page.setViewportSize({ width: viewport.width, height: viewport.height });
-    await page.goto('/');
+	test(`homepage at ${viewport.name} (${viewport.width}x${viewport.height})`, async ({ page }) => {
+		await page.setViewportSize({ width: viewport.width, height: viewport.height });
+		await page.goto("/");
 
-    await expect(page).toHaveScreenshot(`homepage-${viewport.name}.png`, {
-      animations: 'disabled',
-      fullPage: true,
-    });
-  });
+		await expect(page).toHaveScreenshot(`homepage-${viewport.name}.png`, {
+			animations: "disabled",
+			fullPage: true,
+		});
+	});
 }
 ```
 
 **JavaScript**
+
 ```javascript
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
 const viewports = [
-  { name: 'mobile', width: 375, height: 812 },
-  { name: 'tablet', width: 768, height: 1024 },
-  { name: 'desktop', width: 1440, height: 900 },
+	{ name: "mobile", width: 375, height: 812 },
+	{ name: "tablet", width: 768, height: 1024 },
+	{ name: "desktop", width: 1440, height: 900 },
 ];
 
 for (const viewport of viewports) {
-  test(`homepage at ${viewport.name} (${viewport.width}x${viewport.height})`, async ({ page }) => {
-    await page.setViewportSize({ width: viewport.width, height: viewport.height });
-    await page.goto('/');
+	test(`homepage at ${viewport.name} (${viewport.width}x${viewport.height})`, async ({ page }) => {
+		await page.setViewportSize({ width: viewport.width, height: viewport.height });
+		await page.goto("/");
 
-    await expect(page).toHaveScreenshot(`homepage-${viewport.name}.png`, {
-      animations: 'disabled',
-      fullPage: true,
-    });
-  });
+		await expect(page).toHaveScreenshot(`homepage-${viewport.name}.png`, {
+			animations: "disabled",
+			fullPage: true,
+		});
+	});
 }
 ```
 
@@ -624,33 +644,33 @@ for (const viewport of viewports) {
 
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  projects: [
-    {
-      name: 'desktop',
-      testMatch: '**/*.visual.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        viewport: { width: 1440, height: 900 },
-      },
-    },
-    {
-      name: 'tablet',
-      testMatch: '**/*.visual.spec.ts',
-      use: {
-        ...devices['iPad (gen 7)'],
-      },
-    },
-    {
-      name: 'mobile',
-      testMatch: '**/*.visual.spec.ts',
-      use: {
-        ...devices['iPhone 14'],
-      },
-    },
-  ],
+	projects: [
+		{
+			name: "desktop",
+			testMatch: "**/*.visual.spec.ts",
+			use: {
+				...devices["Desktop Chrome"],
+				viewport: { width: 1440, height: 900 },
+			},
+		},
+		{
+			name: "tablet",
+			testMatch: "**/*.visual.spec.ts",
+			use: {
+				...devices["iPad (gen 7)"],
+			},
+		},
+		{
+			name: "mobile",
+			testMatch: "**/*.visual.spec.ts",
+			use: {
+				...devices["iPhone 14"],
+			},
+		},
+	],
 });
 ```
 
@@ -690,7 +710,7 @@ jobs:
       - name: Run visual tests
         run: npx playwright test --project=visual
         env:
-          HOME: /root  # required for Playwright in Docker
+          HOME: /root # required for Playwright in Docker
 
       - uses: actions/upload-artifact@v4
         if: failure()
@@ -713,10 +733,10 @@ docker run --rm -v $(pwd):/work -w /work \
 
 ```json
 {
-  "scripts": {
-    "test:visual": "npx playwright test --project=visual",
-    "test:visual:update": "docker run --rm -v $(pwd):/work -w /work mcr.microsoft.com/playwright:v1.50.0-noble npx playwright test --update-snapshots --project=visual"
-  }
+	"scripts": {
+		"test:visual": "npx playwright test --project=visual",
+		"test:visual:update": "docker run --rm -v $(pwd):/work -w /work mcr.microsoft.com/playwright:v1.50.0-noble npx playwright test --update-snapshots --project=visual"
+	}
 }
 ```
 
@@ -724,19 +744,19 @@ docker run --rm -v $(pwd):/work -w /work \
 
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  snapshotPathTemplate: '{testDir}/{testFileDir}/{testFileName}-snapshots/{arg}{-projectName}{ext}',
-  // Omits {-snapshotSuffix} which includes the platform name (linux, darwin, win32).
-  // This means snapshots are platform-agnostic -- you MUST generate them in Docker.
-  projects: [
-    {
-      name: 'visual',
-      testMatch: '**/*.visual.spec.ts',
-      use: { ...devices['Desktop Chrome'] },
-    },
-  ],
+	snapshotPathTemplate: "{testDir}/{testFileDir}/{testFileName}-snapshots/{arg}{-projectName}{ext}",
+	// Omits {-snapshotSuffix} which includes the platform name (linux, darwin, win32).
+	// This means snapshots are platform-agnostic -- you MUST generate them in Docker.
+	projects: [
+		{
+			name: "visual",
+			testMatch: "**/*.visual.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
+	],
 });
 ```
 
@@ -746,87 +766,89 @@ export default defineConfig({
 **Avoid when**: You need to verify interactions between multiple components or page-level layout.
 
 **TypeScript -- using Playwright component testing**
+
 ```typescript
 // tests/components/button.visual.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Button component visual states', () => {
-  test('primary button', async ({ page }) => {
-    await page.goto('/storybook/iframe.html?id=button--primary');
-    const button = page.getByRole('button');
-    await expect(button).toHaveScreenshot('button-primary.png', {
-      animations: 'disabled',
-    });
-  });
+test.describe("Button component visual states", () => {
+	test("primary button", async ({ page }) => {
+		await page.goto("/storybook/iframe.html?id=button--primary");
+		const button = page.getByRole("button");
+		await expect(button).toHaveScreenshot("button-primary.png", {
+			animations: "disabled",
+		});
+	});
 
-  test('primary button hover', async ({ page }) => {
-    await page.goto('/storybook/iframe.html?id=button--primary');
-    const button = page.getByRole('button');
-    await button.hover();
-    await expect(button).toHaveScreenshot('button-primary-hover.png', {
-      animations: 'disabled',
-    });
-  });
+	test("primary button hover", async ({ page }) => {
+		await page.goto("/storybook/iframe.html?id=button--primary");
+		const button = page.getByRole("button");
+		await button.hover();
+		await expect(button).toHaveScreenshot("button-primary-hover.png", {
+			animations: "disabled",
+		});
+	});
 
-  test('primary button disabled', async ({ page }) => {
-    await page.goto('/storybook/iframe.html?id=button--primary-disabled');
-    const button = page.getByRole('button');
-    await expect(button).toHaveScreenshot('button-primary-disabled.png', {
-      animations: 'disabled',
-    });
-  });
+	test("primary button disabled", async ({ page }) => {
+		await page.goto("/storybook/iframe.html?id=button--primary-disabled");
+		const button = page.getByRole("button");
+		await expect(button).toHaveScreenshot("button-primary-disabled.png", {
+			animations: "disabled",
+		});
+	});
 
-  test('button sizes', async ({ page }) => {
-    for (const size of ['small', 'medium', 'large']) {
-      await page.goto(`/storybook/iframe.html?id=button--${size}`);
-      const button = page.getByRole('button');
-      await expect(button).toHaveScreenshot(`button-${size}.png`, {
-        animations: 'disabled',
-      });
-    }
-  });
+	test("button sizes", async ({ page }) => {
+		for (const size of ["small", "medium", "large"]) {
+			await page.goto(`/storybook/iframe.html?id=button--${size}`);
+			const button = page.getByRole("button");
+			await expect(button).toHaveScreenshot(`button-${size}.png`, {
+				animations: "disabled",
+			});
+		}
+	});
 });
 ```
 
 **JavaScript**
+
 ```javascript
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test.describe('Button component visual states', () => {
-  test('primary button', async ({ page }) => {
-    await page.goto('/storybook/iframe.html?id=button--primary');
-    const button = page.getByRole('button');
-    await expect(button).toHaveScreenshot('button-primary.png', {
-      animations: 'disabled',
-    });
-  });
+test.describe("Button component visual states", () => {
+	test("primary button", async ({ page }) => {
+		await page.goto("/storybook/iframe.html?id=button--primary");
+		const button = page.getByRole("button");
+		await expect(button).toHaveScreenshot("button-primary.png", {
+			animations: "disabled",
+		});
+	});
 
-  test('primary button hover', async ({ page }) => {
-    await page.goto('/storybook/iframe.html?id=button--primary');
-    const button = page.getByRole('button');
-    await button.hover();
-    await expect(button).toHaveScreenshot('button-primary-hover.png', {
-      animations: 'disabled',
-    });
-  });
+	test("primary button hover", async ({ page }) => {
+		await page.goto("/storybook/iframe.html?id=button--primary");
+		const button = page.getByRole("button");
+		await button.hover();
+		await expect(button).toHaveScreenshot("button-primary-hover.png", {
+			animations: "disabled",
+		});
+	});
 
-  test('primary button disabled', async ({ page }) => {
-    await page.goto('/storybook/iframe.html?id=button--primary-disabled');
-    const button = page.getByRole('button');
-    await expect(button).toHaveScreenshot('button-primary-disabled.png', {
-      animations: 'disabled',
-    });
-  });
+	test("primary button disabled", async ({ page }) => {
+		await page.goto("/storybook/iframe.html?id=button--primary-disabled");
+		const button = page.getByRole("button");
+		await expect(button).toHaveScreenshot("button-primary-disabled.png", {
+			animations: "disabled",
+		});
+	});
 
-  test('button sizes', async ({ page }) => {
-    for (const size of ['small', 'medium', 'large']) {
-      await page.goto(`/storybook/iframe.html?id=button--${size}`);
-      const button = page.getByRole('button');
-      await expect(button).toHaveScreenshot(`button-${size}.png`, {
-        animations: 'disabled',
-      });
-    }
-  });
+	test("button sizes", async ({ page }) => {
+		for (const size of ["small", "medium", "large"]) {
+			await page.goto(`/storybook/iframe.html?id=button--${size}`);
+			const button = page.getByRole("button");
+			await expect(button).toHaveScreenshot(`button-${size}.png`, {
+				animations: "disabled",
+			});
+		}
+	});
 });
 ```
 
@@ -834,67 +856,67 @@ test.describe('Button component visual states', () => {
 
 ```typescript
 // tests/components/card.visual.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Card component', () => {
-  test.beforeEach(async ({ page }) => {
-    // Navigate to a page that renders the component in isolation
-    await page.goto('/test-harness/card');
-  });
+test.describe("Card component", () => {
+	test.beforeEach(async ({ page }) => {
+		// Navigate to a page that renders the component in isolation
+		await page.goto("/test-harness/card");
+	});
 
-  test('default state', async ({ page }) => {
-    await expect(page.getByTestId('card')).toHaveScreenshot('card-default.png', {
-      animations: 'disabled',
-    });
-  });
+	test("default state", async ({ page }) => {
+		await expect(page.getByTestId("card")).toHaveScreenshot("card-default.png", {
+			animations: "disabled",
+		});
+	});
 
-  test('with long content truncates correctly', async ({ page }) => {
-    await page.goto('/test-harness/card?content=long');
-    await expect(page.getByTestId('card')).toHaveScreenshot('card-long-content.png', {
-      animations: 'disabled',
-    });
-  });
+	test("with long content truncates correctly", async ({ page }) => {
+		await page.goto("/test-harness/card?content=long");
+		await expect(page.getByTestId("card")).toHaveScreenshot("card-long-content.png", {
+			animations: "disabled",
+		});
+	});
 
-  test('error state', async ({ page }) => {
-    await page.goto('/test-harness/card?state=error');
-    await expect(page.getByTestId('card')).toHaveScreenshot('card-error.png', {
-      animations: 'disabled',
-    });
-  });
+	test("error state", async ({ page }) => {
+		await page.goto("/test-harness/card?state=error");
+		await expect(page.getByTestId("card")).toHaveScreenshot("card-error.png", {
+			animations: "disabled",
+		});
+	});
 });
 ```
 
 ## Decision Guide
 
-| Scenario | Recommended Approach | Why |
-|---|---|---|
-| Key landing pages, marketing site | Full page screenshot, `fullPage: true` | Catches layout shifts, spacing, and overall visual harmony |
-| Individual UI components (buttons, cards, modals) | Element screenshot on the component | Isolated, fast, stable -- immune to unrelated page changes |
-| Page with dynamic content (timestamps, live data) | Full page + `mask` on dynamic elements | Covers layout while ignoring volatile content |
-| Design system component library | Element screenshot per variant, zero threshold | Pixel-perfect enforcement for shared components |
-| Responsive layout verification | Screenshot per viewport (loop or projects) | Catches breakpoint bugs at mobile/tablet/desktop |
-| Cross-browser rendering consistency | Separate snapshots per browser project | Browsers render fonts and shadows differently |
-| CI pipeline | Docker container (Playwright image), Linux-only snapshots | Consistent rendering, no OS-dependent diffs |
-| Pixel threshold: design system | `threshold: 0`, `maxDiffPixels: 0` | Zero tolerance for component library |
-| Pixel threshold: content pages | `maxDiffPixelRatio: 0.01`, `threshold: 0.2` | Allows minor anti-aliasing variance |
-| Pixel threshold: charts and graphs | `maxDiffPixels: 200`, `threshold: 0.3` | Anti-aliasing on curves varies across runs |
-| Visual tests add value | Stable pages, design systems, post-refactor verification | Clear baseline, predictable content |
-| Visual tests are noise | Highly dynamic pages, real-time dashboards, A/B test pages | Content changes on every load, diffs are meaningless |
+| Scenario                                          | Recommended Approach                                       | Why                                                        |
+| ------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| Key landing pages, marketing site                 | Full page screenshot, `fullPage: true`                     | Catches layout shifts, spacing, and overall visual harmony |
+| Individual UI components (buttons, cards, modals) | Element screenshot on the component                        | Isolated, fast, stable -- immune to unrelated page changes |
+| Page with dynamic content (timestamps, live data) | Full page + `mask` on dynamic elements                     | Covers layout while ignoring volatile content              |
+| Design system component library                   | Element screenshot per variant, zero threshold             | Pixel-perfect enforcement for shared components            |
+| Responsive layout verification                    | Screenshot per viewport (loop or projects)                 | Catches breakpoint bugs at mobile/tablet/desktop           |
+| Cross-browser rendering consistency               | Separate snapshots per browser project                     | Browsers render fonts and shadows differently              |
+| CI pipeline                                       | Docker container (Playwright image), Linux-only snapshots  | Consistent rendering, no OS-dependent diffs                |
+| Pixel threshold: design system                    | `threshold: 0`, `maxDiffPixels: 0`                         | Zero tolerance for component library                       |
+| Pixel threshold: content pages                    | `maxDiffPixelRatio: 0.01`, `threshold: 0.2`                | Allows minor anti-aliasing variance                        |
+| Pixel threshold: charts and graphs                | `maxDiffPixels: 200`, `threshold: 0.3`                     | Anti-aliasing on curves varies across runs                 |
+| Visual tests add value                            | Stable pages, design systems, post-refactor verification   | Clear baseline, predictable content                        |
+| Visual tests are noise                            | Highly dynamic pages, real-time dashboards, A/B test pages | Content changes on every load, diffs are meaningless       |
 
 ## Anti-Patterns
 
-| Don't Do This | Problem | Do This Instead |
-|---|---|---|
-| Visual testing every page in the app | Massive snapshot maintenance, constant false failures, team ignores results | Pick 5-10 key pages and critical components. Quality over quantity. |
-| Not masking dynamic content (timestamps, avatars, counters) | Screenshots differ on every run. Tests are permanently flaky. | Use `mask` option for all dynamic elements. Audit pages for volatility before adding visual tests. |
-| Running visual tests across macOS, Linux, and Windows | Font rendering differs per OS. Snapshots never match cross-platform. | Standardize on Linux via Docker. Generate and run snapshots in the same Playwright Docker container. |
-| Not using Docker in CI for visual tests | CI runner OS updates, font changes, or library upgrades silently shift rendering. | Pin a specific Playwright Docker image version. Update intentionally. |
-| Updating snapshots blindly with `--update-snapshots` | Accepts unintentional regressions. The baseline becomes wrong. | Always review the diff in the HTML report first. Understand why the snapshot changed. |
-| Skipping `animations: 'disabled'` | CSS transitions and keyframe animations create random diffs. One of the top causes of flaky visual tests. | Set `animations: 'disabled'` globally in config. |
-| Using visual tests instead of functional assertions | Screenshot diffs do not tell you *what* broke -- just that *something* looks different. Slow to debug. | Use functional assertions (`toHaveText`, `toBeVisible`) for behavior. Visual tests complement, never replace. |
-| Committing snapshots generated on different platforms | The repo has macOS snapshots from dev A, Linux snapshots from dev B. Tests fail for everyone. | All team members generate snapshots using the same Docker container. Add a `test:visual:update` script. |
-| Setting threshold too high (e.g., `maxDiffPixelRatio: 0.1`) | 10% of pixels can change and the test still passes. Defeats the purpose. | Start with `0.01` (1%) and adjust per-test if needed. |
-| Full page screenshots on pages with infinite scroll or lazy loading | Page height is nondeterministic. Screenshots vary by load timing. | Use element screenshots on the above-the-fold content, or scroll to a deterministic state first. |
+| Don't Do This                                                       | Problem                                                                                                   | Do This Instead                                                                                               |
+| ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Visual testing every page in the app                                | Massive snapshot maintenance, constant false failures, team ignores results                               | Pick 5-10 key pages and critical components. Quality over quantity.                                           |
+| Not masking dynamic content (timestamps, avatars, counters)         | Screenshots differ on every run. Tests are permanently flaky.                                             | Use `mask` option for all dynamic elements. Audit pages for volatility before adding visual tests.            |
+| Running visual tests across macOS, Linux, and Windows               | Font rendering differs per OS. Snapshots never match cross-platform.                                      | Standardize on Linux via Docker. Generate and run snapshots in the same Playwright Docker container.          |
+| Not using Docker in CI for visual tests                             | CI runner OS updates, font changes, or library upgrades silently shift rendering.                         | Pin a specific Playwright Docker image version. Update intentionally.                                         |
+| Updating snapshots blindly with `--update-snapshots`                | Accepts unintentional regressions. The baseline becomes wrong.                                            | Always review the diff in the HTML report first. Understand why the snapshot changed.                         |
+| Skipping `animations: 'disabled'`                                   | CSS transitions and keyframe animations create random diffs. One of the top causes of flaky visual tests. | Set `animations: 'disabled'` globally in config.                                                              |
+| Using visual tests instead of functional assertions                 | Screenshot diffs do not tell you _what_ broke -- just that _something_ looks different. Slow to debug.    | Use functional assertions (`toHaveText`, `toBeVisible`) for behavior. Visual tests complement, never replace. |
+| Committing snapshots generated on different platforms               | The repo has macOS snapshots from dev A, Linux snapshots from dev B. Tests fail for everyone.             | All team members generate snapshots using the same Docker container. Add a `test:visual:update` script.       |
+| Setting threshold too high (e.g., `maxDiffPixelRatio: 0.1`)         | 10% of pixels can change and the test still passes. Defeats the purpose.                                  | Start with `0.01` (1%) and adjust per-test if needed.                                                         |
+| Full page screenshots on pages with infinite scroll or lazy loading | Page height is nondeterministic. Screenshots vary by load timing.                                         | Use element screenshots on the above-the-fold content, or scroll to a deterministic state first.              |
 
 ## Troubleshooting
 
@@ -919,9 +941,9 @@ Commit the Linux-generated snapshots. Never commit macOS-generated snapshots if 
 **Fix**: Add a small tolerance:
 
 ```typescript
-await expect(page).toHaveScreenshot('page.png', {
-  maxDiffPixelRatio: 0.01,  // allow 1% variance
-  threshold: 0.2,           // per-pixel color tolerance
+await expect(page).toHaveScreenshot("page.png", {
+	maxDiffPixelRatio: 0.01, // allow 1% variance
+	threshold: 0.2, // per-pixel color tolerance
 });
 ```
 
@@ -935,16 +957,16 @@ If the diff is larger, check the HTML report. Look at the diff image to determin
 
 ```json
 {
-  "devDependencies": {
-    "@playwright/test": "1.50.0"
-  }
+	"devDependencies": {
+		"@playwright/test": "1.50.0"
+	}
 }
 ```
 
 ```yaml
 # CI config
 container:
-  image: mcr.microsoft.com/playwright:v1.50.0-noble  # must match
+  image: mcr.microsoft.com/playwright:v1.50.0-noble # must match
 ```
 
 ### Animations cause random diff failures
@@ -956,11 +978,11 @@ container:
 ```typescript
 // playwright.config.ts
 export default defineConfig({
-  expect: {
-    toHaveScreenshot: {
-      animations: 'disabled',
-    },
-  },
+	expect: {
+		toHaveScreenshot: {
+			animations: "disabled",
+		},
+	},
 });
 ```
 
@@ -973,15 +995,15 @@ For JavaScript-driven animations, wait for a stable state before screenshotting.
 **Fix**: Playwright includes the test file name in the snapshot path by default. If you still have conflicts, use explicit unique names:
 
 ```typescript
-await expect(page).toHaveScreenshot('auth-homepage.png');   // in auth.spec.ts
-await expect(page).toHaveScreenshot('public-homepage.png'); // in public.spec.ts
+await expect(page).toHaveScreenshot("auth-homepage.png"); // in auth.spec.ts
+await expect(page).toHaveScreenshot("public-homepage.png"); // in public.spec.ts
 ```
 
 Or customize the snapshot path template in config:
 
 ```typescript
 export default defineConfig({
-  snapshotPathTemplate: '{testDir}/{testFileDir}/{testFileName}-snapshots/{arg}{-projectName}{ext}',
+	snapshotPathTemplate: "{testDir}/{testFileDir}/{testFileName}-snapshots/{arg}{-projectName}{ext}",
 });
 ```
 
@@ -990,6 +1012,7 @@ export default defineConfig({
 **Cause**: Visual tests for every page, every browser, every viewport. The snapshot count explodes.
 
 **Fix**: Be selective. Visual test only pages where visual regressions are high-risk:
+
 - Landing pages and marketing pages
 - Design system components
 - Complex layouts (dashboards, data tables)

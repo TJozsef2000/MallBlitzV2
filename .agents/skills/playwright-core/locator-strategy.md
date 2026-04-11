@@ -62,21 +62,21 @@ Does the element have a semantic role?
 
 ## Decision Matrix
 
-| Element Type | Recommended Locator | Fallback | Example |
-|---|---|---|---|
-| Button | `getByRole('button', { name })` | `getByText()` if role missing | `getByRole('button', { name: 'Submit' })` |
-| Link | `getByRole('link', { name })` | `getByText()` for anchor text | `getByRole('link', { name: 'Sign up' })` |
-| Text input | `getByLabel('...')` | `getByRole('textbox', { name })` | `getByLabel('Email address')` |
-| Checkbox | `getByRole('checkbox', { name })` | `getByLabel()` | `getByRole('checkbox', { name: 'Accept terms' })` |
-| Radio button | `getByRole('radio', { name })` | `getByLabel()` | `getByRole('radio', { name: 'Express shipping' })` |
-| Dropdown / Select | `getByRole('combobox', { name })` | `getByLabel()` | `getByLabel('Country')` |
-| Heading | `getByRole('heading', { name, level })` | `getByText()` | `getByRole('heading', { name: 'Dashboard', level: 1 })` |
-| Nav link | chain: `getByRole('navigation').getByRole('link', { name })` | scope with `locator('nav')` | see detailed example below |
-| Table cell | chain: `getByRole('row').filter().getByRole('cell')` | `locator('td')` scoped | see detailed example below |
-| Image | `getByRole('img', { name })` | `getByAltText()` | `getByRole('img', { name: 'Company logo' })` |
-| Modal / Dialog | `getByRole('dialog')` then chain within | `locator('[role="dialog"]')` | `getByRole('dialog').getByRole('button', { name: 'Confirm' })` |
-| Dynamic list item | `.filter({ hasText })` or `.filter({ has })` | `nth()` as last resort | `getByRole('listitem').filter({ hasText: 'Milk' })` |
-| Custom component | `getByTestId('...')` | Add `data-testid` to markup | `getByTestId('color-picker')` |
+| Element Type      | Recommended Locator                                          | Fallback                         | Example                                                        |
+| ----------------- | ------------------------------------------------------------ | -------------------------------- | -------------------------------------------------------------- |
+| Button            | `getByRole('button', { name })`                              | `getByText()` if role missing    | `getByRole('button', { name: 'Submit' })`                      |
+| Link              | `getByRole('link', { name })`                                | `getByText()` for anchor text    | `getByRole('link', { name: 'Sign up' })`                       |
+| Text input        | `getByLabel('...')`                                          | `getByRole('textbox', { name })` | `getByLabel('Email address')`                                  |
+| Checkbox          | `getByRole('checkbox', { name })`                            | `getByLabel()`                   | `getByRole('checkbox', { name: 'Accept terms' })`              |
+| Radio button      | `getByRole('radio', { name })`                               | `getByLabel()`                   | `getByRole('radio', { name: 'Express shipping' })`             |
+| Dropdown / Select | `getByRole('combobox', { name })`                            | `getByLabel()`                   | `getByLabel('Country')`                                        |
+| Heading           | `getByRole('heading', { name, level })`                      | `getByText()`                    | `getByRole('heading', { name: 'Dashboard', level: 1 })`        |
+| Nav link          | chain: `getByRole('navigation').getByRole('link', { name })` | scope with `locator('nav')`      | see detailed example below                                     |
+| Table cell        | chain: `getByRole('row').filter().getByRole('cell')`         | `locator('td')` scoped           | see detailed example below                                     |
+| Image             | `getByRole('img', { name })`                                 | `getByAltText()`                 | `getByRole('img', { name: 'Company logo' })`                   |
+| Modal / Dialog    | `getByRole('dialog')` then chain within                      | `locator('[role="dialog"]')`     | `getByRole('dialog').getByRole('button', { name: 'Confirm' })` |
+| Dynamic list item | `.filter({ hasText })` or `.filter({ has })`                 | `nth()` as last resort           | `getByRole('listitem').filter({ hasText: 'Milk' })`            |
+| Custom component  | `getByTestId('...')`                                         | Add `data-testid` to markup      | `getByTestId('color-picker')`                                  |
 
 ## Detailed Analysis
 
@@ -85,12 +85,14 @@ Does the element have a semantic role?
 The strongest locator. It mirrors how assistive technology and real users perceive the page.
 
 **Pros**
+
 - Resilient to markup refactors (class names, tag changes)
 - Enforces accessible markup -- if the locator breaks, your accessibility broke too
 - Works across frameworks (React, Vue, Angular, plain HTML)
 - Supports filtering by `name`, `level`, `checked`, `pressed`, `expanded`, `selected`
 
 **Cons**
+
 - Requires the element to have a valid ARIA role (implicit or explicit)
 - Can match multiple elements when names are duplicated -- scope with chaining
 
@@ -103,10 +105,12 @@ The strongest locator. It mirrors how assistive technology and real users percei
 Queries by the associated `<label>` text. This is often the most readable locator for form fields.
 
 **Pros**
+
 - Extremely readable: `getByLabel('Password')` tells you exactly what field
 - Works with `<label for="...">`, wrapping `<label>`, and `aria-labelledby`
 
 **Cons**
+
 - Only works for form elements with labels
 - Breaks if someone changes label text (but that is usually intentional)
 
@@ -119,10 +123,12 @@ Queries by the associated `<label>` text. This is often the most readable locato
 Finds elements by their visible text content.
 
 **Pros**
+
 - Intuitive for non-interactive text (paragraphs, spans, badges, status messages)
 - Supports exact and substring matching
 
 **Cons**
+
 - Fragile if text is dynamic, translated, or duplicated
 - Can match parent elements unintentionally -- use `{ exact: true }` or scope the query
 
@@ -135,9 +141,11 @@ Finds elements by their visible text content.
 Locates by placeholder attribute value.
 
 **Pros**
+
 - Works when labels are missing (search bars, minimal UIs)
 
 **Cons**
+
 - Placeholders disappear when the user types -- poor UX foundation
 - Signals missing accessibility (no label)
 
@@ -150,10 +158,12 @@ Locates by placeholder attribute value.
 Locates by `data-testid` attribute.
 
 **Pros**
+
 - Fully decoupled from user-facing text and structure
 - Stable under UI redesigns
 
 **Cons**
+
 - Invisible to users and assistive technology
 - Pollutes production markup (unless stripped in build)
 - Tells you nothing about what the element looks like or does
@@ -181,27 +191,25 @@ If you are reaching for a CSS selector, stop. Walk back up the flowchart and fin
 ```typescript
 // TypeScript
 // Standard button
-await page.getByRole('button', { name: 'Submit' }).click();
+await page.getByRole("button", { name: "Submit" }).click();
 
 // Icon-only button (uses aria-label)
-await page.getByRole('button', { name: 'Close' }).click();
+await page.getByRole("button", { name: "Close" }).click();
 
 // Button inside a specific section
-await page.getByRole('region', { name: 'Billing' })
-  .getByRole('button', { name: 'Update' }).click();
+await page.getByRole("region", { name: "Billing" }).getByRole("button", { name: "Update" }).click();
 ```
 
 ```javascript
 // JavaScript
 // Standard button
-await page.getByRole('button', { name: 'Submit' }).click();
+await page.getByRole("button", { name: "Submit" }).click();
 
 // Icon-only button (uses aria-label)
-await page.getByRole('button', { name: 'Close' }).click();
+await page.getByRole("button", { name: "Close" }).click();
 
 // Button inside a specific section
-await page.getByRole('region', { name: 'Billing' })
-  .getByRole('button', { name: 'Update' }).click();
+await page.getByRole("region", { name: "Billing" }).getByRole("button", { name: "Update" }).click();
 ```
 
 ---
@@ -211,24 +219,22 @@ await page.getByRole('region', { name: 'Billing' })
 ```typescript
 // TypeScript
 // Standard link
-await page.getByRole('link', { name: 'Sign up' }).click();
+await page.getByRole("link", { name: "Sign up" }).click();
 
 // Link inside navigation
-await page.getByRole('navigation')
-  .getByRole('link', { name: 'Pricing' }).click();
+await page.getByRole("navigation").getByRole("link", { name: "Pricing" }).click();
 
 // Link with exact match (avoid partial hits)
-await page.getByRole('link', { name: 'Log in', exact: true }).click();
+await page.getByRole("link", { name: "Log in", exact: true }).click();
 ```
 
 ```javascript
 // JavaScript
-await page.getByRole('link', { name: 'Sign up' }).click();
+await page.getByRole("link", { name: "Sign up" }).click();
 
-await page.getByRole('navigation')
-  .getByRole('link', { name: 'Pricing' }).click();
+await page.getByRole("navigation").getByRole("link", { name: "Pricing" }).click();
 
-await page.getByRole('link', { name: 'Log in', exact: true }).click();
+await page.getByRole("link", { name: "Log in", exact: true }).click();
 ```
 
 ---
@@ -238,27 +244,27 @@ await page.getByRole('link', { name: 'Log in', exact: true }).click();
 ```typescript
 // TypeScript
 // Input with a visible label -- preferred
-await page.getByLabel('Email address').fill('user@example.com');
+await page.getByLabel("Email address").fill("user@example.com");
 
 // When multiple textboxes exist and you need role specificity
-await page.getByRole('textbox', { name: 'Email address' }).fill('user@example.com');
+await page.getByRole("textbox", { name: "Email address" }).fill("user@example.com");
 
 // Textarea
-await page.getByLabel('Message').fill('Hello, world');
+await page.getByLabel("Message").fill("Hello, world");
 
 // Search input (role = searchbox)
-await page.getByRole('searchbox', { name: 'Search' }).fill('playwright');
+await page.getByRole("searchbox", { name: "Search" }).fill("playwright");
 ```
 
 ```javascript
 // JavaScript
-await page.getByLabel('Email address').fill('user@example.com');
+await page.getByLabel("Email address").fill("user@example.com");
 
-await page.getByRole('textbox', { name: 'Email address' }).fill('user@example.com');
+await page.getByRole("textbox", { name: "Email address" }).fill("user@example.com");
 
-await page.getByLabel('Message').fill('Hello, world');
+await page.getByLabel("Message").fill("Hello, world");
 
-await page.getByRole('searchbox', { name: 'Search' }).fill('playwright');
+await page.getByRole("searchbox", { name: "Search" }).fill("playwright");
 ```
 
 ---
@@ -268,29 +274,27 @@ await page.getByRole('searchbox', { name: 'Search' }).fill('playwright');
 ```typescript
 // TypeScript
 // Checkbox
-await page.getByRole('checkbox', { name: 'Accept terms' }).check();
+await page.getByRole("checkbox", { name: "Accept terms" }).check();
 
 // Verify checked state
-await expect(page.getByRole('checkbox', { name: 'Accept terms' })).toBeChecked();
+await expect(page.getByRole("checkbox", { name: "Accept terms" })).toBeChecked();
 
 // Radio button
-await page.getByRole('radio', { name: 'Express shipping' }).check();
+await page.getByRole("radio", { name: "Express shipping" }).check();
 
 // Radio within a group (fieldset with legend)
-await page.getByRole('group', { name: 'Shipping method' })
-  .getByRole('radio', { name: 'Express' }).check();
+await page.getByRole("group", { name: "Shipping method" }).getByRole("radio", { name: "Express" }).check();
 ```
 
 ```javascript
 // JavaScript
-await page.getByRole('checkbox', { name: 'Accept terms' }).check();
+await page.getByRole("checkbox", { name: "Accept terms" }).check();
 
-await expect(page.getByRole('checkbox', { name: 'Accept terms' })).toBeChecked();
+await expect(page.getByRole("checkbox", { name: "Accept terms" })).toBeChecked();
 
-await page.getByRole('radio', { name: 'Express shipping' }).check();
+await page.getByRole("radio", { name: "Express shipping" }).check();
 
-await page.getByRole('group', { name: 'Shipping method' })
-  .getByRole('radio', { name: 'Express' }).check();
+await page.getByRole("group", { name: "Shipping method" }).getByRole("radio", { name: "Express" }).check();
 ```
 
 ---
@@ -300,26 +304,26 @@ await page.getByRole('group', { name: 'Shipping method' })
 ```typescript
 // TypeScript
 // Native <select> element
-await page.getByLabel('Country').selectOption('Canada');
+await page.getByLabel("Country").selectOption("Canada");
 
 // Custom combobox (ARIA combobox role)
-await page.getByRole('combobox', { name: 'Country' }).click();
-await page.getByRole('option', { name: 'Canada' }).click();
+await page.getByRole("combobox", { name: "Country" }).click();
+await page.getByRole("option", { name: "Canada" }).click();
 
 // Listbox pattern
-await page.getByRole('combobox', { name: 'Font size' }).click();
-await page.getByRole('listbox').getByRole('option', { name: '16px' }).click();
+await page.getByRole("combobox", { name: "Font size" }).click();
+await page.getByRole("listbox").getByRole("option", { name: "16px" }).click();
 ```
 
 ```javascript
 // JavaScript
-await page.getByLabel('Country').selectOption('Canada');
+await page.getByLabel("Country").selectOption("Canada");
 
-await page.getByRole('combobox', { name: 'Country' }).click();
-await page.getByRole('option', { name: 'Canada' }).click();
+await page.getByRole("combobox", { name: "Country" }).click();
+await page.getByRole("option", { name: "Canada" }).click();
 
-await page.getByRole('combobox', { name: 'Font size' }).click();
-await page.getByRole('listbox').getByRole('option', { name: '16px' }).click();
+await page.getByRole("combobox", { name: "Font size" }).click();
+await page.getByRole("listbox").getByRole("option", { name: "16px" }).click();
 ```
 
 ---
@@ -329,24 +333,22 @@ await page.getByRole('listbox').getByRole('option', { name: '16px' }).click();
 ```typescript
 // TypeScript
 // Specific heading level
-await expect(page.getByRole('heading', { name: 'Dashboard', level: 1 })).toBeVisible();
+await expect(page.getByRole("heading", { name: "Dashboard", level: 1 })).toBeVisible();
 
 // Any heading with that name (when level does not matter)
-await expect(page.getByRole('heading', { name: 'Recent activity' })).toBeVisible();
+await expect(page.getByRole("heading", { name: "Recent activity" })).toBeVisible();
 
 // Heading within a section
-await page.getByRole('region', { name: 'Sidebar' })
-  .getByRole('heading', { name: 'Categories' });
+await page.getByRole("region", { name: "Sidebar" }).getByRole("heading", { name: "Categories" });
 ```
 
 ```javascript
 // JavaScript
-await expect(page.getByRole('heading', { name: 'Dashboard', level: 1 })).toBeVisible();
+await expect(page.getByRole("heading", { name: "Dashboard", level: 1 })).toBeVisible();
 
-await expect(page.getByRole('heading', { name: 'Recent activity' })).toBeVisible();
+await expect(page.getByRole("heading", { name: "Recent activity" })).toBeVisible();
 
-await page.getByRole('region', { name: 'Sidebar' })
-  .getByRole('heading', { name: 'Categories' });
+await page.getByRole("region", { name: "Sidebar" }).getByRole("heading", { name: "Categories" });
 ```
 
 ---
@@ -356,28 +358,22 @@ await page.getByRole('region', { name: 'Sidebar' })
 ```typescript
 // TypeScript
 // Link inside the main nav
-await page.getByRole('navigation')
-  .getByRole('link', { name: 'Pricing' }).click();
+await page.getByRole("navigation").getByRole("link", { name: "Pricing" }).click();
 
 // When there are multiple navs, narrow by aria-label
-await page.getByRole('navigation', { name: 'Main menu' })
-  .getByRole('link', { name: 'Pricing' }).click();
+await page.getByRole("navigation", { name: "Main menu" }).getByRole("link", { name: "Pricing" }).click();
 
 // Breadcrumb navigation
-await page.getByRole('navigation', { name: 'Breadcrumb' })
-  .getByRole('link', { name: 'Products' }).click();
+await page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Products" }).click();
 ```
 
 ```javascript
 // JavaScript
-await page.getByRole('navigation')
-  .getByRole('link', { name: 'Pricing' }).click();
+await page.getByRole("navigation").getByRole("link", { name: "Pricing" }).click();
 
-await page.getByRole('navigation', { name: 'Main menu' })
-  .getByRole('link', { name: 'Pricing' }).click();
+await page.getByRole("navigation", { name: "Main menu" }).getByRole("link", { name: "Pricing" }).click();
 
-await page.getByRole('navigation', { name: 'Breadcrumb' })
-  .getByRole('link', { name: 'Products' }).click();
+await page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Products" }).click();
 ```
 
 ---
@@ -387,33 +383,35 @@ await page.getByRole('navigation', { name: 'Breadcrumb' })
 ```typescript
 // TypeScript
 // Find a cell in a specific row
-await page.getByRole('row', { name: /Jane Smith/ })
-  .getByRole('cell', { name: '$120.00' });
+await page.getByRole("row", { name: /Jane Smith/ }).getByRole("cell", { name: "$120.00" });
 
 // Click an action button in a specific row
-await page.getByRole('row', { name: /Jane Smith/ })
-  .getByRole('button', { name: 'Edit' }).click();
+await page
+	.getByRole("row", { name: /Jane Smith/ })
+	.getByRole("button", { name: "Edit" })
+	.click();
 
 // Filter rows using .filter() for complex matching
-const row = page.getByRole('row').filter({ hasText: 'Pending' });
-await row.getByRole('button', { name: 'Approve' }).click();
+const row = page.getByRole("row").filter({ hasText: "Pending" });
+await row.getByRole("button", { name: "Approve" }).click();
 
 // Verify table header exists
-await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
+await expect(page.getByRole("columnheader", { name: "Status" })).toBeVisible();
 ```
 
 ```javascript
 // JavaScript
-await page.getByRole('row', { name: /Jane Smith/ })
-  .getByRole('cell', { name: '$120.00' });
+await page.getByRole("row", { name: /Jane Smith/ }).getByRole("cell", { name: "$120.00" });
 
-await page.getByRole('row', { name: /Jane Smith/ })
-  .getByRole('button', { name: 'Edit' }).click();
+await page
+	.getByRole("row", { name: /Jane Smith/ })
+	.getByRole("button", { name: "Edit" })
+	.click();
 
-const row = page.getByRole('row').filter({ hasText: 'Pending' });
-await row.getByRole('button', { name: 'Approve' }).click();
+const row = page.getByRole("row").filter({ hasText: "Pending" });
+await row.getByRole("button", { name: "Approve" }).click();
 
-await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
+await expect(page.getByRole("columnheader", { name: "Status" })).toBeVisible();
 ```
 
 ---
@@ -423,24 +421,28 @@ await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
 ```typescript
 // TypeScript
 // Image with alt text
-await expect(page.getByRole('img', { name: 'Company logo' })).toBeVisible();
+await expect(page.getByRole("img", { name: "Company logo" })).toBeVisible();
 
 // Alternative: getByAltText (same result, less preferred)
-await expect(page.getByAltText('Company logo')).toBeVisible();
+await expect(page.getByAltText("Company logo")).toBeVisible();
 
 // Avatar image inside a card
-await page.locator('article').filter({ hasText: 'Jane Smith' })
-  .getByRole('img', { name: "Jane Smith's avatar" });
+await page
+	.locator("article")
+	.filter({ hasText: "Jane Smith" })
+	.getByRole("img", { name: "Jane Smith's avatar" });
 ```
 
 ```javascript
 // JavaScript
-await expect(page.getByRole('img', { name: 'Company logo' })).toBeVisible();
+await expect(page.getByRole("img", { name: "Company logo" })).toBeVisible();
 
-await expect(page.getByAltText('Company logo')).toBeVisible();
+await expect(page.getByAltText("Company logo")).toBeVisible();
 
-await page.locator('article').filter({ hasText: 'Jane Smith' })
-  .getByRole('img', { name: "Jane Smith's avatar" });
+await page
+	.locator("article")
+	.filter({ hasText: "Jane Smith" })
+	.getByRole("img", { name: "Jane Smith's avatar" });
 ```
 
 ---
@@ -450,23 +452,23 @@ await page.locator('article').filter({ hasText: 'Jane Smith' })
 ```typescript
 // TypeScript
 // Third-party color picker with no semantic role
-await page.getByTestId('color-picker').click();
+await page.getByTestId("color-picker").click();
 
 // Custom drag-and-drop zone
-await page.getByTestId('drop-zone').dispatchEvent('drop', { dataTransfer });
+await page.getByTestId("drop-zone").dispatchEvent("drop", { dataTransfer });
 
 // Canvas-based chart
-const chart = page.getByTestId('revenue-chart');
+const chart = page.getByTestId("revenue-chart");
 await expect(chart).toBeVisible();
 ```
 
 ```javascript
 // JavaScript
-await page.getByTestId('color-picker').click();
+await page.getByTestId("color-picker").click();
 
-await page.getByTestId('drop-zone').dispatchEvent('drop', { dataTransfer });
+await page.getByTestId("drop-zone").dispatchEvent("drop", { dataTransfer });
 
-const chart = page.getByTestId('revenue-chart');
+const chart = page.getByTestId("revenue-chart");
 await expect(chart).toBeVisible();
 ```
 
@@ -479,38 +481,38 @@ await expect(chart).toBeVisible();
 ```typescript
 // TypeScript
 // Filter a list item by text
-const item = page.getByRole('listitem').filter({ hasText: 'Milk' });
-await item.getByRole('button', { name: 'Remove' }).click();
+const item = page.getByRole("listitem").filter({ hasText: "Milk" });
+await item.getByRole("button", { name: "Remove" }).click();
 
 // Filter by a child locator
-const card = page.locator('.product-card').filter({
-  has: page.getByText('Out of stock'),
+const card = page.locator(".product-card").filter({
+	has: page.getByText("Out of stock"),
 });
 await expect(card).toHaveCount(3);
 
 // Count items in a list
-await expect(page.getByRole('listitem')).toHaveCount(5);
+await expect(page.getByRole("listitem")).toHaveCount(5);
 
 // Iterate over list items for complex assertions
-for (const item of await page.getByRole('listitem').all()) {
-  await expect(item).toContainText('$');
+for (const item of await page.getByRole("listitem").all()) {
+	await expect(item).toContainText("$");
 }
 ```
 
 ```javascript
 // JavaScript
-const item = page.getByRole('listitem').filter({ hasText: 'Milk' });
-await item.getByRole('button', { name: 'Remove' }).click();
+const item = page.getByRole("listitem").filter({ hasText: "Milk" });
+await item.getByRole("button", { name: "Remove" }).click();
 
-const card = page.locator('.product-card').filter({
-  has: page.getByText('Out of stock'),
+const card = page.locator(".product-card").filter({
+	has: page.getByText("Out of stock"),
 });
 await expect(card).toHaveCount(3);
 
-await expect(page.getByRole('listitem')).toHaveCount(5);
+await expect(page.getByRole("listitem")).toHaveCount(5);
 
-for (const item of await page.getByRole('listitem').all()) {
-  await expect(item).toContainText('$');
+for (const item of await page.getByRole("listitem").all()) {
+	await expect(item).toContainText("$");
 }
 ```
 
@@ -521,14 +523,14 @@ for (const item of await page.getByRole('listitem').all()) {
 ```typescript
 // TypeScript
 // Wait for dialog to appear, then interact within it
-const dialog = page.getByRole('dialog', { name: 'Confirm deletion' });
+const dialog = page.getByRole("dialog", { name: "Confirm deletion" });
 await expect(dialog).toBeVisible();
-await dialog.getByRole('button', { name: 'Delete' }).click();
+await dialog.getByRole("button", { name: "Delete" }).click();
 
 // Fill a form inside a dialog
-const modal = page.getByRole('dialog', { name: 'Edit profile' });
-await modal.getByLabel('Display name').fill('Jane');
-await modal.getByRole('button', { name: 'Save' }).click();
+const modal = page.getByRole("dialog", { name: "Edit profile" });
+await modal.getByLabel("Display name").fill("Jane");
+await modal.getByRole("button", { name: "Save" }).click();
 
 // Verify dialog closed
 await expect(dialog).toBeHidden();
@@ -536,27 +538,27 @@ await expect(dialog).toBeHidden();
 
 ```javascript
 // JavaScript
-const dialog = page.getByRole('dialog', { name: 'Confirm deletion' });
+const dialog = page.getByRole("dialog", { name: "Confirm deletion" });
 await expect(dialog).toBeVisible();
-await dialog.getByRole('button', { name: 'Delete' }).click();
+await dialog.getByRole("button", { name: "Delete" }).click();
 
-const modal = page.getByRole('dialog', { name: 'Edit profile' });
-await modal.getByLabel('Display name').fill('Jane');
-await modal.getByRole('button', { name: 'Save' }).click();
+const modal = page.getByRole("dialog", { name: "Edit profile" });
+await modal.getByLabel("Display name").fill("Jane");
+await modal.getByRole("button", { name: "Save" }).click();
 
 await expect(dialog).toBeHidden();
 ```
 
 ## Anti-Patterns to Avoid
 
-| Anti-Pattern | Why It Fails | Use Instead |
-|---|---|---|
-| `page.locator('.btn-primary')` | Class names change during refactors and redesigns | `getByRole('button', { name: '...' })` |
-| `page.locator('#email-input')` | IDs are implementation details, not user-visible | `getByLabel('Email')` |
-| `page.locator('div > form > input:first-child')` | Any structural change breaks the selector | `getByLabel('...')` or `getByRole('textbox', { name: '...' })` |
-| `page.locator('[data-testid="submit"]')` | Raw CSS for test IDs -- use the built-in method | `getByTestId('submit')` |
-| `page.getByText('Submit')` for a button | Matches any element with that text, not just the button | `getByRole('button', { name: 'Submit' })` |
-| `page.locator('button').nth(2)` | Index-based -- breaks when order changes | `getByRole('button', { name: '...' })` |
+| Anti-Pattern                                     | Why It Fails                                            | Use Instead                                                    |
+| ------------------------------------------------ | ------------------------------------------------------- | -------------------------------------------------------------- |
+| `page.locator('.btn-primary')`                   | Class names change during refactors and redesigns       | `getByRole('button', { name: '...' })`                         |
+| `page.locator('#email-input')`                   | IDs are implementation details, not user-visible        | `getByLabel('Email')`                                          |
+| `page.locator('div > form > input:first-child')` | Any structural change breaks the selector               | `getByLabel('...')` or `getByRole('textbox', { name: '...' })` |
+| `page.locator('[data-testid="submit"]')`         | Raw CSS for test IDs -- use the built-in method         | `getByTestId('submit')`                                        |
+| `page.getByText('Submit')` for a button          | Matches any element with that text, not just the button | `getByRole('button', { name: 'Submit' })`                      |
+| `page.locator('button').nth(2)`                  | Index-based -- breaks when order changes                | `getByRole('button', { name: '...' })`                         |
 
 ## Scoping Strategy: When Multiple Elements Match
 
@@ -564,19 +566,16 @@ When a locator matches more than one element, narrow scope rather than using `nt
 
 ```typescript
 // BAD: fragile index
-page.getByRole('button', { name: 'Edit' }).nth(0);
+page.getByRole("button", { name: "Edit" }).nth(0);
 
 // GOOD: scope to a parent section
-page.getByRole('region', { name: 'Billing' })
-  .getByRole('button', { name: 'Edit' });
+page.getByRole("region", { name: "Billing" }).getByRole("button", { name: "Edit" });
 
 // GOOD: scope to a table row
-page.getByRole('row', { name: /Order #1234/ })
-  .getByRole('button', { name: 'Edit' });
+page.getByRole("row", { name: /Order #1234/ }).getByRole("button", { name: "Edit" });
 
 // GOOD: scope with filter
-page.locator('article').filter({ hasText: 'Draft' })
-  .getByRole('button', { name: 'Edit' });
+page.locator("article").filter({ hasText: "Draft" }).getByRole("button", { name: "Edit" });
 ```
 
 ## Related

@@ -5,16 +5,16 @@
 
 ## Quick Reference
 
-| Concept | Rule |
-|---|---|
-| File suffix | `.spec.ts` / `.spec.js` — always |
-| Grouping | By feature/domain, not by page or URL |
-| Test names | `test('should ...')` or `test('user can ...')` — describe behavior |
-| Nesting | Max 2 levels of `test.describe()` |
-| Default execution | `fullyParallel: true` — tests run in parallel by default |
-| Serial tests | Almost never use `test.describe.serial()` |
-| Test dependencies | Avoid — each test sets up its own state |
-| Tags | `@smoke`, `@regression`, `@slow` — filter with `--grep` |
+| Concept           | Rule                                                               |
+| ----------------- | ------------------------------------------------------------------ |
+| File suffix       | `.spec.ts` / `.spec.js` — always                                   |
+| Grouping          | By feature/domain, not by page or URL                              |
+| Test names        | `test('should ...')` or `test('user can ...')` — describe behavior |
+| Nesting           | Max 2 levels of `test.describe()`                                  |
+| Default execution | `fullyParallel: true` — tests run in parallel by default           |
+| Serial tests      | Almost never use `test.describe.serial()`                          |
+| Test dependencies | Avoid — each test sets up its own state                            |
+| Tags              | `@smoke`, `@regression`, `@slow` — filter with `--grep`            |
 
 ## Patterns
 
@@ -117,29 +117,29 @@ playwright.config.ts
 
 ```typescript
 // tests/checkout/cart.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 // Good: group by feature, describe behavior
-test.describe('Shopping Cart', () => {
-  test('should add item to empty cart', async ({ page }) => {
-    await page.goto('/products/widget-a');
-    await page.getByRole('button', { name: 'Add to cart' }).click();
-    await expect(page.getByTestId('cart-count')).toHaveText('1');
-  });
+test.describe("Shopping Cart", () => {
+	test("should add item to empty cart", async ({ page }) => {
+		await page.goto("/products/widget-a");
+		await page.getByRole("button", { name: "Add to cart" }).click();
+		await expect(page.getByTestId("cart-count")).toHaveText("1");
+	});
 
-  test('should update quantity when same item added twice', async ({ page }) => {
-    await page.goto('/products/widget-a');
-    await page.getByRole('button', { name: 'Add to cart' }).click();
-    await page.getByRole('button', { name: 'Add to cart' }).click();
-    await expect(page.getByTestId('cart-count')).toHaveText('2');
-  });
+	test("should update quantity when same item added twice", async ({ page }) => {
+		await page.goto("/products/widget-a");
+		await page.getByRole("button", { name: "Add to cart" }).click();
+		await page.getByRole("button", { name: "Add to cart" }).click();
+		await expect(page.getByTestId("cart-count")).toHaveText("2");
+	});
 
-  test('user can remove item from cart', async ({ page }) => {
-    await page.goto('/cart');
-    // ... setup item in cart via API or fixture
-    await page.getByRole('button', { name: 'Remove' }).first().click();
-    await expect(page.getByText('Your cart is empty')).toBeVisible();
-  });
+	test("user can remove item from cart", async ({ page }) => {
+		await page.goto("/cart");
+		// ... setup item in cart via API or fixture
+		await page.getByRole("button", { name: "Remove" }).first().click();
+		await expect(page.getByText("Your cart is empty")).toBeVisible();
+	});
 });
 ```
 
@@ -147,39 +147,39 @@ test.describe('Shopping Cart', () => {
 
 ```javascript
 // tests/checkout/cart.spec.js
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test.describe('Shopping Cart', () => {
-  test('should add item to empty cart', async ({ page }) => {
-    await page.goto('/products/widget-a');
-    await page.getByRole('button', { name: 'Add to cart' }).click();
-    await expect(page.getByTestId('cart-count')).toHaveText('1');
-  });
+test.describe("Shopping Cart", () => {
+	test("should add item to empty cart", async ({ page }) => {
+		await page.goto("/products/widget-a");
+		await page.getByRole("button", { name: "Add to cart" }).click();
+		await expect(page.getByTestId("cart-count")).toHaveText("1");
+	});
 
-  test('should update quantity when same item added twice', async ({ page }) => {
-    await page.goto('/products/widget-a');
-    await page.getByRole('button', { name: 'Add to cart' }).click();
-    await page.getByRole('button', { name: 'Add to cart' }).click();
-    await expect(page.getByTestId('cart-count')).toHaveText('2');
-  });
+	test("should update quantity when same item added twice", async ({ page }) => {
+		await page.goto("/products/widget-a");
+		await page.getByRole("button", { name: "Add to cart" }).click();
+		await page.getByRole("button", { name: "Add to cart" }).click();
+		await expect(page.getByTestId("cart-count")).toHaveText("2");
+	});
 
-  test('user can remove item from cart', async ({ page }) => {
-    await page.goto('/cart');
-    await page.getByRole('button', { name: 'Remove' }).first().click();
-    await expect(page.getByText('Your cart is empty')).toBeVisible();
-  });
+	test("user can remove item from cart", async ({ page }) => {
+		await page.goto("/cart");
+		await page.getByRole("button", { name: "Remove" }).first().click();
+		await expect(page.getByText("Your cart is empty")).toBeVisible();
+	});
 });
 ```
 
 **Naming rules:**
 
-| Element | Convention | Example |
-|---|---|---|
-| File name | `kebab-case.spec.ts` | `password-reset.spec.ts` |
-| `test.describe()` | Title Case, feature name | `'Password Reset'` |
-| `test()` | Sentence starting with `should` or `user can` | `'should send reset email'` |
-| Page objects | `PascalCase.page.ts` | `login.page.ts` / `LoginPage` |
-| Fixtures | `kebab-case.fixture.ts` | `auth.fixture.ts` |
+| Element           | Convention                                    | Example                       |
+| ----------------- | --------------------------------------------- | ----------------------------- |
+| File name         | `kebab-case.spec.ts`                          | `password-reset.spec.ts`      |
+| `test.describe()` | Title Case, feature name                      | `'Password Reset'`            |
+| `test()`          | Sentence starting with `should` or `user can` | `'should send reset email'`   |
+| Page objects      | `PascalCase.page.ts`                          | `login.page.ts` / `LoginPage` |
+| Fixtures          | `kebab-case.fixture.ts`                       | `auth.fixture.ts`             |
 
 ---
 
@@ -192,39 +192,39 @@ test.describe('Shopping Cart', () => {
 
 ```typescript
 // tests/auth/login.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Login', () => {
-  // Shared setup for all tests in this describe block
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/login');
-  });
+test.describe("Login", () => {
+	// Shared setup for all tests in this describe block
+	test.beforeEach(async ({ page }) => {
+		await page.goto("/login");
+	});
 
-  test('should login with valid credentials', async ({ page }) => {
-    await page.getByLabel('Email').fill('user@example.com');
-    await page.getByLabel('Password').fill('securepass123');
-    await page.getByRole('button', { name: 'Sign in' }).click();
-    await expect(page).toHaveURL('/dashboard');
-  });
+	test("should login with valid credentials", async ({ page }) => {
+		await page.getByLabel("Email").fill("user@example.com");
+		await page.getByLabel("Password").fill("securepass123");
+		await page.getByRole("button", { name: "Sign in" }).click();
+		await expect(page).toHaveURL("/dashboard");
+	});
 
-  test('should show error for invalid password', async ({ page }) => {
-    await page.getByLabel('Email').fill('user@example.com');
-    await page.getByLabel('Password').fill('wrongpassword');
-    await page.getByRole('button', { name: 'Sign in' }).click();
-    await expect(page.getByRole('alert')).toHaveText('Invalid credentials');
-  });
+	test("should show error for invalid password", async ({ page }) => {
+		await page.getByLabel("Email").fill("user@example.com");
+		await page.getByLabel("Password").fill("wrongpassword");
+		await page.getByRole("button", { name: "Sign in" }).click();
+		await expect(page.getByRole("alert")).toHaveText("Invalid credentials");
+	});
 
-  // One level of nesting — acceptable
-  test.describe('Rate Limiting', () => {
-    test('should lock account after 5 failed attempts', async ({ page }) => {
-      for (let i = 0; i < 5; i++) {
-        await page.getByLabel('Email').fill('user@example.com');
-        await page.getByLabel('Password').fill('wrong');
-        await page.getByRole('button', { name: 'Sign in' }).click();
-      }
-      await expect(page.getByRole('alert')).toContainText('Account locked');
-    });
-  });
+	// One level of nesting — acceptable
+	test.describe("Rate Limiting", () => {
+		test("should lock account after 5 failed attempts", async ({ page }) => {
+			for (let i = 0; i < 5; i++) {
+				await page.getByLabel("Email").fill("user@example.com");
+				await page.getByLabel("Password").fill("wrong");
+				await page.getByRole("button", { name: "Sign in" }).click();
+			}
+			await expect(page.getByRole("alert")).toContainText("Account locked");
+		});
+	});
 });
 ```
 
@@ -232,37 +232,37 @@ test.describe('Login', () => {
 
 ```javascript
 // tests/auth/login.spec.js
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test.describe('Login', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/login');
-  });
+test.describe("Login", () => {
+	test.beforeEach(async ({ page }) => {
+		await page.goto("/login");
+	});
 
-  test('should login with valid credentials', async ({ page }) => {
-    await page.getByLabel('Email').fill('user@example.com');
-    await page.getByLabel('Password').fill('securepass123');
-    await page.getByRole('button', { name: 'Sign in' }).click();
-    await expect(page).toHaveURL('/dashboard');
-  });
+	test("should login with valid credentials", async ({ page }) => {
+		await page.getByLabel("Email").fill("user@example.com");
+		await page.getByLabel("Password").fill("securepass123");
+		await page.getByRole("button", { name: "Sign in" }).click();
+		await expect(page).toHaveURL("/dashboard");
+	});
 
-  test('should show error for invalid password', async ({ page }) => {
-    await page.getByLabel('Email').fill('user@example.com');
-    await page.getByLabel('Password').fill('wrongpassword');
-    await page.getByRole('button', { name: 'Sign in' }).click();
-    await expect(page.getByRole('alert')).toHaveText('Invalid credentials');
-  });
+	test("should show error for invalid password", async ({ page }) => {
+		await page.getByLabel("Email").fill("user@example.com");
+		await page.getByLabel("Password").fill("wrongpassword");
+		await page.getByRole("button", { name: "Sign in" }).click();
+		await expect(page.getByRole("alert")).toHaveText("Invalid credentials");
+	});
 
-  test.describe('Rate Limiting', () => {
-    test('should lock account after 5 failed attempts', async ({ page }) => {
-      for (let i = 0; i < 5; i++) {
-        await page.getByLabel('Email').fill('user@example.com');
-        await page.getByLabel('Password').fill('wrong');
-        await page.getByRole('button', { name: 'Sign in' }).click();
-      }
-      await expect(page.getByRole('alert')).toContainText('Account locked');
-    });
-  });
+	test.describe("Rate Limiting", () => {
+		test("should lock account after 5 failed attempts", async ({ page }) => {
+			for (let i = 0; i < 5; i++) {
+				await page.getByLabel("Email").fill("user@example.com");
+				await page.getByLabel("Password").fill("wrong");
+				await page.getByRole("button", { name: "Sign in" }).click();
+			}
+			await expect(page.getByRole("alert")).toContainText("Account locked");
+		});
+	});
 });
 ```
 
@@ -279,68 +279,68 @@ test.describe('Login', () => {
 
 ```typescript
 // tests/checkout/payment.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 // Tag in the test title — simplest approach
-test('should process credit card payment @smoke', async ({ page }) => {
-  await page.goto('/checkout');
-  await page.getByLabel('Card number').fill('4242424242424242');
-  await page.getByLabel('Expiry').fill('12/28');
-  await page.getByLabel('CVC').fill('123');
-  await page.getByRole('button', { name: 'Pay now' }).click();
-  await expect(page.getByText('Payment successful')).toBeVisible();
+test("should process credit card payment @smoke", async ({ page }) => {
+	await page.goto("/checkout");
+	await page.getByLabel("Card number").fill("4242424242424242");
+	await page.getByLabel("Expiry").fill("12/28");
+	await page.getByLabel("CVC").fill("123");
+	await page.getByRole("button", { name: "Pay now" }).click();
+	await expect(page.getByText("Payment successful")).toBeVisible();
 });
 
-test('should handle declined card @regression', async ({ page }) => {
-  await page.goto('/checkout');
-  await page.getByLabel('Card number').fill('4000000000000002');
-  await page.getByLabel('Expiry').fill('12/28');
-  await page.getByLabel('CVC').fill('123');
-  await page.getByRole('button', { name: 'Pay now' }).click();
-  await expect(page.getByRole('alert')).toContainText('Card declined');
+test("should handle declined card @regression", async ({ page }) => {
+	await page.goto("/checkout");
+	await page.getByLabel("Card number").fill("4000000000000002");
+	await page.getByLabel("Expiry").fill("12/28");
+	await page.getByLabel("CVC").fill("123");
+	await page.getByRole("button", { name: "Pay now" }).click();
+	await expect(page.getByRole("alert")).toContainText("Card declined");
 });
 
 // Tag via test.describe for group-level tagging
-test.describe('Payment Edge Cases @regression', () => {
-  test('should handle network timeout during payment', async ({ page }) => {
-    await page.goto('/checkout');
-    // ... test implementation
-    await expect(page.getByText('Please try again')).toBeVisible();
-  });
+test.describe("Payment Edge Cases @regression", () => {
+	test("should handle network timeout during payment", async ({ page }) => {
+		await page.goto("/checkout");
+		// ... test implementation
+		await expect(page.getByText("Please try again")).toBeVisible();
+	});
 });
 
 // Annotations for test lifecycle control
-test('should render 3D Secure iframe @slow', async ({ page }) => {
-  test.slow(); // Triples the default timeout
-  await page.goto('/checkout/3ds');
-  // ... long-running 3D Secure flow
-  await expect(page.getByText('Verified')).toBeVisible();
+test("should render 3D Secure iframe @slow", async ({ page }) => {
+	test.slow(); // Triples the default timeout
+	await page.goto("/checkout/3ds");
+	// ... long-running 3D Secure flow
+	await expect(page.getByText("Verified")).toBeVisible();
 });
 
-test('should apply loyalty points discount', async ({ page }) => {
-  test.skip(process.env.CI !== 'true', 'Only run in CI — needs loyalty service');
-  await page.goto('/checkout');
-  // ...
+test("should apply loyalty points discount", async ({ page }) => {
+	test.skip(process.env.CI !== "true", "Only run in CI — needs loyalty service");
+	await page.goto("/checkout");
+	// ...
 });
 
-test('should handle Apple Pay on Safari', async ({ page, browserName }) => {
-  test.skip(browserName !== 'webkit', 'Apple Pay only works in Safari');
-  await page.goto('/checkout');
-  // ...
+test("should handle Apple Pay on Safari", async ({ page, browserName }) => {
+	test.skip(browserName !== "webkit", "Apple Pay only works in Safari");
+	await page.goto("/checkout");
+	// ...
 });
 
-test('should display PayPal button', async ({ page }) => {
-  test.fixme(); // Known broken — tracked in JIRA-1234
-  await page.goto('/checkout');
-  await expect(page.getByRole('button', { name: 'PayPal' })).toBeVisible();
+test("should display PayPal button", async ({ page }) => {
+	test.fixme(); // Known broken — tracked in JIRA-1234
+	await page.goto("/checkout");
+	await expect(page.getByRole("button", { name: "PayPal" })).toBeVisible();
 });
 
-test('should fail when submitting empty card form', async ({ page }) => {
-  test.fail(); // This test is expected to fail — documents known bug
-  await page.goto('/checkout');
-  await page.getByRole('button', { name: 'Pay now' }).click();
-  // Bug: currently no validation shown — this assertion will fail
-  await expect(page.getByRole('alert')).toBeVisible();
+test("should fail when submitting empty card form", async ({ page }) => {
+	test.fail(); // This test is expected to fail — documents known bug
+	await page.goto("/checkout");
+	await page.getByRole("button", { name: "Pay now" }).click();
+	// Bug: currently no validation shown — this assertion will fail
+	await expect(page.getByRole("alert")).toBeVisible();
 });
 ```
 
@@ -348,73 +348,73 @@ test('should fail when submitting empty card form', async ({ page }) => {
 
 ```javascript
 // tests/checkout/payment.spec.js
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test('should process credit card payment @smoke', async ({ page }) => {
-  await page.goto('/checkout');
-  await page.getByLabel('Card number').fill('4242424242424242');
-  await page.getByLabel('Expiry').fill('12/28');
-  await page.getByLabel('CVC').fill('123');
-  await page.getByRole('button', { name: 'Pay now' }).click();
-  await expect(page.getByText('Payment successful')).toBeVisible();
+test("should process credit card payment @smoke", async ({ page }) => {
+	await page.goto("/checkout");
+	await page.getByLabel("Card number").fill("4242424242424242");
+	await page.getByLabel("Expiry").fill("12/28");
+	await page.getByLabel("CVC").fill("123");
+	await page.getByRole("button", { name: "Pay now" }).click();
+	await expect(page.getByText("Payment successful")).toBeVisible();
 });
 
-test('should handle declined card @regression', async ({ page }) => {
-  await page.goto('/checkout');
-  await page.getByLabel('Card number').fill('4000000000000002');
-  await page.getByLabel('Expiry').fill('12/28');
-  await page.getByLabel('CVC').fill('123');
-  await page.getByRole('button', { name: 'Pay now' }).click();
-  await expect(page.getByRole('alert')).toContainText('Card declined');
+test("should handle declined card @regression", async ({ page }) => {
+	await page.goto("/checkout");
+	await page.getByLabel("Card number").fill("4000000000000002");
+	await page.getByLabel("Expiry").fill("12/28");
+	await page.getByLabel("CVC").fill("123");
+	await page.getByRole("button", { name: "Pay now" }).click();
+	await expect(page.getByRole("alert")).toContainText("Card declined");
 });
 
-test.describe('Payment Edge Cases @regression', () => {
-  test('should handle network timeout during payment', async ({ page }) => {
-    await page.goto('/checkout');
-    await expect(page.getByText('Please try again')).toBeVisible();
-  });
+test.describe("Payment Edge Cases @regression", () => {
+	test("should handle network timeout during payment", async ({ page }) => {
+		await page.goto("/checkout");
+		await expect(page.getByText("Please try again")).toBeVisible();
+	});
 });
 
-test('should render 3D Secure iframe @slow', async ({ page }) => {
-  test.slow();
-  await page.goto('/checkout/3ds');
-  await expect(page.getByText('Verified')).toBeVisible();
+test("should render 3D Secure iframe @slow", async ({ page }) => {
+	test.slow();
+	await page.goto("/checkout/3ds");
+	await expect(page.getByText("Verified")).toBeVisible();
 });
 
-test('should apply loyalty points discount', async ({ page }) => {
-  test.skip(process.env.CI !== 'true', 'Only run in CI — needs loyalty service');
-  await page.goto('/checkout');
+test("should apply loyalty points discount", async ({ page }) => {
+	test.skip(process.env.CI !== "true", "Only run in CI — needs loyalty service");
+	await page.goto("/checkout");
 });
 
-test('should handle Apple Pay on Safari', async ({ page, browserName }) => {
-  test.skip(browserName !== 'webkit', 'Apple Pay only works in Safari');
-  await page.goto('/checkout');
+test("should handle Apple Pay on Safari", async ({ page, browserName }) => {
+	test.skip(browserName !== "webkit", "Apple Pay only works in Safari");
+	await page.goto("/checkout");
 });
 
-test('should display PayPal button', async ({ page }) => {
-  test.fixme(); // Known broken — tracked in JIRA-1234
-  await page.goto('/checkout');
-  await expect(page.getByRole('button', { name: 'PayPal' })).toBeVisible();
+test("should display PayPal button", async ({ page }) => {
+	test.fixme(); // Known broken — tracked in JIRA-1234
+	await page.goto("/checkout");
+	await expect(page.getByRole("button", { name: "PayPal" })).toBeVisible();
 });
 
-test('should fail when submitting empty card form', async ({ page }) => {
-  test.fail();
-  await page.goto('/checkout');
-  await page.getByRole('button', { name: 'Pay now' }).click();
-  await expect(page.getByRole('alert')).toBeVisible();
+test("should fail when submitting empty card form", async ({ page }) => {
+	test.fail();
+	await page.goto("/checkout");
+	await page.getByRole("button", { name: "Pay now" }).click();
+	await expect(page.getByRole("alert")).toBeVisible();
 });
 ```
 
 **Annotation cheat sheet:**
 
-| Annotation | Effect | When to use |
-|---|---|---|
-| `test.skip()` | Skips the test entirely | Feature not available in this env/browser |
-| `test.skip(condition, reason)` | Conditional skip | Browser-specific or env-specific tests |
-| `test.fixme()` | Skips and marks as "needs fix" | Known bug, not yet fixed |
-| `test.slow()` | Triples the timeout | Tests with inherently slow workflows |
-| `test.fail()` | Expects the test to fail; fails if it passes | Documenting a known bug with a regression guard |
-| `test.info().annotations` | Add custom annotations | Custom metadata for reports |
+| Annotation                     | Effect                                       | When to use                                     |
+| ------------------------------ | -------------------------------------------- | ----------------------------------------------- |
+| `test.skip()`                  | Skips the test entirely                      | Feature not available in this env/browser       |
+| `test.skip(condition, reason)` | Conditional skip                             | Browser-specific or env-specific tests          |
+| `test.fixme()`                 | Skips and marks as "needs fix"               | Known bug, not yet fixed                        |
+| `test.slow()`                  | Triples the timeout                          | Tests with inherently slow workflows            |
+| `test.fail()`                  | Expects the test to fail; fails if it passes | Documenting a known bug with a regression guard |
+| `test.info().annotations`      | Add custom annotations                       | Custom metadata for reports                     |
 
 ---
 
@@ -454,26 +454,26 @@ npx playwright test tests/auth/login.spec.ts:15
 
 ```typescript
 // playwright.config.ts
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  projects: [
-    {
-      name: 'smoke',
-      testMatch: '**/*.spec.ts',
-      grep: /@smoke/,
-    },
-    {
-      name: 'regression',
-      testMatch: '**/*.spec.ts',
-      grep: /@regression/,
-    },
-    {
-      name: 'all',
-      testMatch: '**/*.spec.ts',
-      grepInvert: /@slow/,
-    },
-  ],
+	projects: [
+		{
+			name: "smoke",
+			testMatch: "**/*.spec.ts",
+			grep: /@smoke/,
+		},
+		{
+			name: "regression",
+			testMatch: "**/*.spec.ts",
+			grep: /@regression/,
+		},
+		{
+			name: "all",
+			testMatch: "**/*.spec.ts",
+			grepInvert: /@slow/,
+		},
+	],
 });
 ```
 
@@ -481,26 +481,26 @@ export default defineConfig({
 
 ```javascript
 // playwright.config.js
-const { defineConfig } = require('@playwright/test');
+const { defineConfig } = require("@playwright/test");
 
 module.exports = defineConfig({
-  projects: [
-    {
-      name: 'smoke',
-      testMatch: '**/*.spec.js',
-      grep: /@smoke/,
-    },
-    {
-      name: 'regression',
-      testMatch: '**/*.spec.js',
-      grep: /@regression/,
-    },
-    {
-      name: 'all',
-      testMatch: '**/*.spec.js',
-      grepInvert: /@slow/,
-    },
-  ],
+	projects: [
+		{
+			name: "smoke",
+			testMatch: "**/*.spec.js",
+			grep: /@smoke/,
+		},
+		{
+			name: "regression",
+			testMatch: "**/*.spec.js",
+			grep: /@regression/,
+		},
+		{
+			name: "all",
+			testMatch: "**/*.spec.js",
+			grepInvert: /@slow/,
+		},
+	],
 });
 ```
 
@@ -517,11 +517,11 @@ module.exports = defineConfig({
 
 ```typescript
 // playwright.config.ts
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  fullyParallel: true, // All tests run in parallel by default
-  workers: process.env.CI ? 1 : undefined, // Use all cores locally, 1 in CI (or adjust)
+	fullyParallel: true, // All tests run in parallel by default
+	workers: process.env.CI ? 1 : undefined, // Use all cores locally, 1 in CI (or adjust)
 });
 ```
 
@@ -529,11 +529,11 @@ export default defineConfig({
 
 ```javascript
 // playwright.config.js
-const { defineConfig } = require('@playwright/test');
+const { defineConfig } = require("@playwright/test");
 
 module.exports = defineConfig({
-  fullyParallel: true,
-  workers: process.env.CI ? 1 : undefined,
+	fullyParallel: true,
+	workers: process.env.CI ? 1 : undefined,
 });
 ```
 
@@ -543,29 +543,29 @@ module.exports = defineConfig({
 
 ```typescript
 // tests/onboarding/wizard.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 // ONLY use serial when steps truly depend on prior state that cannot be set up independently
-test.describe.serial('Onboarding Wizard', () => {
-  test('step 1: user enters company name', async ({ page }) => {
-    await page.goto('/onboarding');
-    await page.getByLabel('Company name').fill('Acme Corp');
-    await page.getByRole('button', { name: 'Next' }).click();
-    await expect(page).toHaveURL('/onboarding/step-2');
-  });
+test.describe.serial("Onboarding Wizard", () => {
+	test("step 1: user enters company name", async ({ page }) => {
+		await page.goto("/onboarding");
+		await page.getByLabel("Company name").fill("Acme Corp");
+		await page.getByRole("button", { name: "Next" }).click();
+		await expect(page).toHaveURL("/onboarding/step-2");
+	});
 
-  test('step 2: user selects plan', async ({ page }) => {
-    await page.goto('/onboarding/step-2');
-    await page.getByRole('radio', { name: 'Pro plan' }).check();
-    await page.getByRole('button', { name: 'Next' }).click();
-    await expect(page).toHaveURL('/onboarding/step-3');
-  });
+	test("step 2: user selects plan", async ({ page }) => {
+		await page.goto("/onboarding/step-2");
+		await page.getByRole("radio", { name: "Pro plan" }).check();
+		await page.getByRole("button", { name: "Next" }).click();
+		await expect(page).toHaveURL("/onboarding/step-3");
+	});
 
-  test('step 3: user confirms and completes', async ({ page }) => {
-    await page.goto('/onboarding/step-3');
-    await page.getByRole('button', { name: 'Complete setup' }).click();
-    await expect(page.getByText('Welcome to Acme Corp')).toBeVisible();
-  });
+	test("step 3: user confirms and completes", async ({ page }) => {
+		await page.goto("/onboarding/step-3");
+		await page.getByRole("button", { name: "Complete setup" }).click();
+		await expect(page.getByText("Welcome to Acme Corp")).toBeVisible();
+	});
 });
 ```
 
@@ -573,28 +573,28 @@ test.describe.serial('Onboarding Wizard', () => {
 
 ```javascript
 // tests/onboarding/wizard.spec.js
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test.describe.serial('Onboarding Wizard', () => {
-  test('step 1: user enters company name', async ({ page }) => {
-    await page.goto('/onboarding');
-    await page.getByLabel('Company name').fill('Acme Corp');
-    await page.getByRole('button', { name: 'Next' }).click();
-    await expect(page).toHaveURL('/onboarding/step-2');
-  });
+test.describe.serial("Onboarding Wizard", () => {
+	test("step 1: user enters company name", async ({ page }) => {
+		await page.goto("/onboarding");
+		await page.getByLabel("Company name").fill("Acme Corp");
+		await page.getByRole("button", { name: "Next" }).click();
+		await expect(page).toHaveURL("/onboarding/step-2");
+	});
 
-  test('step 2: user selects plan', async ({ page }) => {
-    await page.goto('/onboarding/step-2');
-    await page.getByRole('radio', { name: 'Pro plan' }).check();
-    await page.getByRole('button', { name: 'Next' }).click();
-    await expect(page).toHaveURL('/onboarding/step-3');
-  });
+	test("step 2: user selects plan", async ({ page }) => {
+		await page.goto("/onboarding/step-2");
+		await page.getByRole("radio", { name: "Pro plan" }).check();
+		await page.getByRole("button", { name: "Next" }).click();
+		await expect(page).toHaveURL("/onboarding/step-3");
+	});
 
-  test('step 3: user confirms and completes', async ({ page }) => {
-    await page.goto('/onboarding/step-3');
-    await page.getByRole('button', { name: 'Complete setup' }).click();
-    await expect(page.getByText('Welcome to Acme Corp')).toBeVisible();
-  });
+	test("step 3: user confirms and completes", async ({ page }) => {
+		await page.goto("/onboarding/step-3");
+		await page.getByRole("button", { name: "Complete setup" }).click();
+		await expect(page.getByText("Welcome to Acme Corp")).toBeVisible();
+	});
 });
 ```
 
@@ -604,26 +604,26 @@ test.describe.serial('Onboarding Wizard', () => {
 
 ```typescript
 // tests/onboarding/wizard.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('user completes full onboarding wizard', async ({ page }) => {
-  await test.step('enter company name', async () => {
-    await page.goto('/onboarding');
-    await page.getByLabel('Company name').fill('Acme Corp');
-    await page.getByRole('button', { name: 'Next' }).click();
-    await expect(page).toHaveURL('/onboarding/step-2');
-  });
+test("user completes full onboarding wizard", async ({ page }) => {
+	await test.step("enter company name", async () => {
+		await page.goto("/onboarding");
+		await page.getByLabel("Company name").fill("Acme Corp");
+		await page.getByRole("button", { name: "Next" }).click();
+		await expect(page).toHaveURL("/onboarding/step-2");
+	});
 
-  await test.step('select plan', async () => {
-    await page.getByRole('radio', { name: 'Pro plan' }).check();
-    await page.getByRole('button', { name: 'Next' }).click();
-    await expect(page).toHaveURL('/onboarding/step-3');
-  });
+	await test.step("select plan", async () => {
+		await page.getByRole("radio", { name: "Pro plan" }).check();
+		await page.getByRole("button", { name: "Next" }).click();
+		await expect(page).toHaveURL("/onboarding/step-3");
+	});
 
-  await test.step('confirm and complete', async () => {
-    await page.getByRole('button', { name: 'Complete setup' }).click();
-    await expect(page.getByText('Welcome to Acme Corp')).toBeVisible();
-  });
+	await test.step("confirm and complete", async () => {
+		await page.getByRole("button", { name: "Complete setup" }).click();
+		await expect(page.getByText("Welcome to Acme Corp")).toBeVisible();
+	});
 });
 ```
 
@@ -631,26 +631,26 @@ test('user completes full onboarding wizard', async ({ page }) => {
 
 ```javascript
 // tests/onboarding/wizard.spec.js
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
-test('user completes full onboarding wizard', async ({ page }) => {
-  await test.step('enter company name', async () => {
-    await page.goto('/onboarding');
-    await page.getByLabel('Company name').fill('Acme Corp');
-    await page.getByRole('button', { name: 'Next' }).click();
-    await expect(page).toHaveURL('/onboarding/step-2');
-  });
+test("user completes full onboarding wizard", async ({ page }) => {
+	await test.step("enter company name", async () => {
+		await page.goto("/onboarding");
+		await page.getByLabel("Company name").fill("Acme Corp");
+		await page.getByRole("button", { name: "Next" }).click();
+		await expect(page).toHaveURL("/onboarding/step-2");
+	});
 
-  await test.step('select plan', async () => {
-    await page.getByRole('radio', { name: 'Pro plan' }).check();
-    await page.getByRole('button', { name: 'Next' }).click();
-    await expect(page).toHaveURL('/onboarding/step-3');
-  });
+	await test.step("select plan", async () => {
+		await page.getByRole("radio", { name: "Pro plan" }).check();
+		await page.getByRole("button", { name: "Next" }).click();
+		await expect(page).toHaveURL("/onboarding/step-3");
+	});
 
-  await test.step('confirm and complete', async () => {
-    await page.getByRole('button', { name: 'Complete setup' }).click();
-    await expect(page.getByText('Welcome to Acme Corp')).toBeVisible();
-  });
+	await test.step("confirm and complete", async () => {
+		await page.getByRole("button", { name: "Complete setup" }).click();
+		await expect(page.getByText("Welcome to Acme Corp")).toBeVisible();
+	});
 });
 ```
 
@@ -665,32 +665,32 @@ test('user completes full onboarding wizard', async ({ page }) => {
 
 ```typescript
 // playwright.config.ts (root of monorepo)
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  projects: [
-    {
-      name: 'web-app',
-      testDir: './apps/web/tests',
-      use: {
-        baseURL: 'http://localhost:3000',
-      },
-    },
-    {
-      name: 'admin-panel',
-      testDir: './apps/admin/tests',
-      use: {
-        baseURL: 'http://localhost:3001',
-      },
-    },
-    {
-      name: 'marketing-site',
-      testDir: './apps/marketing/tests',
-      use: {
-        baseURL: 'http://localhost:4000',
-      },
-    },
-  ],
+	projects: [
+		{
+			name: "web-app",
+			testDir: "./apps/web/tests",
+			use: {
+				baseURL: "http://localhost:3000",
+			},
+		},
+		{
+			name: "admin-panel",
+			testDir: "./apps/admin/tests",
+			use: {
+				baseURL: "http://localhost:3001",
+			},
+		},
+		{
+			name: "marketing-site",
+			testDir: "./apps/marketing/tests",
+			use: {
+				baseURL: "http://localhost:4000",
+			},
+		},
+	],
 });
 ```
 
@@ -698,32 +698,32 @@ export default defineConfig({
 
 ```javascript
 // playwright.config.js (root of monorepo)
-const { defineConfig } = require('@playwright/test');
+const { defineConfig } = require("@playwright/test");
 
 module.exports = defineConfig({
-  projects: [
-    {
-      name: 'web-app',
-      testDir: './apps/web/tests',
-      use: {
-        baseURL: 'http://localhost:3000',
-      },
-    },
-    {
-      name: 'admin-panel',
-      testDir: './apps/admin/tests',
-      use: {
-        baseURL: 'http://localhost:3001',
-      },
-    },
-    {
-      name: 'marketing-site',
-      testDir: './apps/marketing/tests',
-      use: {
-        baseURL: 'http://localhost:4000',
-      },
-    },
-  ],
+	projects: [
+		{
+			name: "web-app",
+			testDir: "./apps/web/tests",
+			use: {
+				baseURL: "http://localhost:3000",
+			},
+		},
+		{
+			name: "admin-panel",
+			testDir: "./apps/admin/tests",
+			use: {
+				baseURL: "http://localhost:3001",
+			},
+		},
+		{
+			name: "marketing-site",
+			testDir: "./apps/marketing/tests",
+			use: {
+				baseURL: "http://localhost:4000",
+			},
+		},
+	],
 });
 ```
 
@@ -808,11 +808,17 @@ Should I use test.describe.serial()?
 
 ```typescript
 // BAD: tests/all-tests.spec.ts with 80 tests and 2000+ lines
-test.describe('Everything', () => {
-  test('login works', async ({ page }) => { /* ... */ });
-  test('signup works', async ({ page }) => { /* ... */ });
-  test('cart works', async ({ page }) => { /* ... */ });
-  // ... 77 more tests
+test.describe("Everything", () => {
+	test("login works", async ({ page }) => {
+		/* ... */
+	});
+	test("signup works", async ({ page }) => {
+		/* ... */
+	});
+	test("cart works", async ({ page }) => {
+		/* ... */
+	});
+	// ... 77 more tests
 });
 ```
 
@@ -824,18 +830,30 @@ test.describe('Everything', () => {
 
 ```typescript
 // BAD
-test('test1', async ({ page }) => { /* ... */ });
-test('test2', async ({ page }) => { /* ... */ });
-test('payment test', async ({ page }) => { /* ... */ });
-test('it works', async ({ page }) => { /* ... */ });
+test("test1", async ({ page }) => {
+	/* ... */
+});
+test("test2", async ({ page }) => {
+	/* ... */
+});
+test("payment test", async ({ page }) => {
+	/* ... */
+});
+test("it works", async ({ page }) => {
+	/* ... */
+});
 ```
 
 **Fix:** Describe behavior. When a test fails, the name should tell you what broke.
 
 ```typescript
 // GOOD
-test('should reject expired credit card', async ({ page }) => { /* ... */ });
-test('user can update shipping address during checkout', async ({ page }) => { /* ... */ });
+test("should reject expired credit card", async ({ page }) => {
+	/* ... */
+});
+test("user can update shipping address during checkout", async ({ page }) => {
+	/* ... */
+});
 ```
 
 ---
@@ -844,14 +862,16 @@ test('user can update shipping address during checkout', async ({ page }) => { /
 
 ```typescript
 // BAD: 3+ levels deep — hard to read, hard to find tests in reports
-test.describe('Auth', () => {
-  test.describe('Login', () => {
-    test.describe('With MFA', () => {
-      test.describe('SMS', () => {
-        test('should send code', async ({ page }) => { /* ... */ });
-      });
-    });
-  });
+test.describe("Auth", () => {
+	test.describe("Login", () => {
+		test.describe("With MFA", () => {
+			test.describe("SMS", () => {
+				test("should send code", async ({ page }) => {
+					/* ... */
+				});
+			});
+		});
+	});
 });
 ```
 
@@ -859,9 +879,13 @@ test.describe('Auth', () => {
 
 ```typescript
 // GOOD: tests/auth/login-mfa-sms.spec.ts
-test.describe('Login with SMS MFA', () => {
-  test('should send verification code', async ({ page }) => { /* ... */ });
-  test('should reject invalid code', async ({ page }) => { /* ... */ });
+test.describe("Login with SMS MFA", () => {
+	test("should send verification code", async ({ page }) => {
+		/* ... */
+	});
+	test("should reject invalid code", async ({ page }) => {
+		/* ... */
+	});
 });
 ```
 
@@ -871,10 +895,16 @@ test.describe('Login with SMS MFA', () => {
 
 ```typescript
 // BAD: serial for no reason — kills parallelism, creates hidden dependencies
-test.describe.serial('User Profile', () => {
-  test('should display profile page', async ({ page }) => { /* ... */ });
-  test('should update display name', async ({ page }) => { /* ... */ });
-  test('should upload avatar', async ({ page }) => { /* ... */ });
+test.describe.serial("User Profile", () => {
+	test("should display profile page", async ({ page }) => {
+		/* ... */
+	});
+	test("should update display name", async ({ page }) => {
+		/* ... */
+	});
+	test("should upload avatar", async ({ page }) => {
+		/* ... */
+	});
 });
 ```
 
@@ -882,14 +912,20 @@ test.describe.serial('User Profile', () => {
 
 ```typescript
 // GOOD
-test.describe('User Profile', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/profile');
-  });
+test.describe("User Profile", () => {
+	test.beforeEach(async ({ page }) => {
+		await page.goto("/profile");
+	});
 
-  test('should display profile page', async ({ page }) => { /* ... */ });
-  test('should update display name', async ({ page }) => { /* ... */ });
-  test('should upload avatar', async ({ page }) => { /* ... */ });
+	test("should display profile page", async ({ page }) => {
+		/* ... */
+	});
+	test("should update display name", async ({ page }) => {
+		/* ... */
+	});
+	test("should upload avatar", async ({ page }) => {
+		/* ... */
+	});
 });
 ```
 
@@ -899,12 +935,12 @@ test.describe('User Profile', () => {
 
 ```typescript
 // BAD: test 2 depends on test 1 creating data
-test('should create a product', async ({ page }) => {
-  // creates "Widget X" in the database
+test("should create a product", async ({ page }) => {
+	// creates "Widget X" in the database
 });
 
-test('should edit the product', async ({ page }) => {
-  // assumes "Widget X" exists — breaks if run alone or in parallel
+test("should edit the product", async ({ page }) => {
+	// assumes "Widget X" exists — breaks if run alone or in parallel
 });
 ```
 
@@ -912,30 +948,30 @@ test('should edit the product', async ({ page }) => {
 
 ```typescript
 // GOOD
-test('should edit a product', async ({ page, request }) => {
-  // Set up test data independently
-  const response = await request.post('/api/products', {
-    data: { name: 'Widget X', price: 9.99 },
-  });
-  const product = await response.json();
+test("should edit a product", async ({ page, request }) => {
+	// Set up test data independently
+	const response = await request.post("/api/products", {
+		data: { name: "Widget X", price: 9.99 },
+	});
+	const product = await response.json();
 
-  await page.goto(`/products/${product.id}/edit`);
-  await page.getByLabel('Name').fill('Widget X Updated');
-  await page.getByRole('button', { name: 'Save' }).click();
-  await expect(page.getByText('Widget X Updated')).toBeVisible();
+	await page.goto(`/products/${product.id}/edit`);
+	await page.getByLabel("Name").fill("Widget X Updated");
+	await page.getByRole("button", { name: "Save" }).click();
+	await expect(page.getByText("Widget X Updated")).toBeVisible();
 });
 ```
 
 ## Troubleshooting
 
-| Problem | Cause | Fix |
-|---|---|---|
-| Tests pass alone but fail together | Shared state between tests (cookies, DB rows, global variables) | Isolate each test — use fixtures for setup/teardown |
-| `--grep @smoke` matches nothing | Tag not in test title string | Verify the tag appears literally in `test('... @smoke', ...)` |
-| Serial tests cascade-fail | One test fails, all subsequent tests skip | Rewrite as independent tests or use `test.step()` in a single test |
-| Tests run slower than expected | `fullyParallel` not set | Add `fullyParallel: true` in `playwright.config` |
-| Wrong tests run in CI | `testMatch` or `testDir` misconfigured | Check `playwright.config` — print resolved config with `npx playwright test --list` |
-| Monorepo tests pick up wrong files | Default `testDir` is `.` | Set explicit `testDir` per project |
+| Problem                            | Cause                                                           | Fix                                                                                 |
+| ---------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Tests pass alone but fail together | Shared state between tests (cookies, DB rows, global variables) | Isolate each test — use fixtures for setup/teardown                                 |
+| `--grep @smoke` matches nothing    | Tag not in test title string                                    | Verify the tag appears literally in `test('... @smoke', ...)`                       |
+| Serial tests cascade-fail          | One test fails, all subsequent tests skip                       | Rewrite as independent tests or use `test.step()` in a single test                  |
+| Tests run slower than expected     | `fullyParallel` not set                                         | Add `fullyParallel: true` in `playwright.config`                                    |
+| Wrong tests run in CI              | `testMatch` or `testDir` misconfigured                          | Check `playwright.config` — print resolved config with `npx playwright test --list` |
+| Monorepo tests pick up wrong files | Default `testDir` is `.`                                        | Set explicit `testDir` per project                                                  |
 
 ## Related
 
