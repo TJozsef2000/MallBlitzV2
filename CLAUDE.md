@@ -48,6 +48,7 @@ npm run format:check
 ## Environment Setup
 
 Copy `.env.example` to `.env` and fill in credentials. Required variables:
+
 - `LOGIN_FULLNAME`, `LOGIN_EMAIL`, `LOGIN_PASSWORD` — preset test user
 - `ADMIN_LOGIN_EMAIL`, `ADMIN_LOGIN_PASSWORD` — admin user
 
@@ -68,6 +69,7 @@ All DOM interaction lives in page objects, never in spec files directly.
 ### Fixtures
 
 **`E2E/fixtures/pomManager.ts`** exports three test fixtures:
+
 - `test` — base fixture, provides `pomManager` and `mailHelper`
 - `userTest` — extends `test` with logged-in user storage state
 - `adminTest` — extends `test` with logged-in admin storage state

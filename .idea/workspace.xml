@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="986cb592-ad3a-47c3-ab41-3ea3e41569db" name="Changes" comment="">
+    <list default="true" id="986cb592-ad3a-47c3-ab41-3ea3e41569db" name="Changes" comment="Refactor, and move pages to its own folders">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E2E/pages/Admin/BrandCreatePage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/pages/Admin/Brands/BrandCreatePage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E2E/pages/Admin/BrandsPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/pages/Admin/Brands/BrandsPage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E2E/pages/Admin/InboxPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/pages/Admin/Inbox/InboxPage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E2E/pages/Admin/MediaPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/pages/Admin/Media/MediaPage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E2E/pages/Admin/UserCreatePage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/pages/Admin/Users/UserCreatePage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E2E/pages/Admin/UsersPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/pages/Admin/Users/UsersPage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E2E/pages/ManagePage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/pages/ManagePage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/E2E/tests/admin/Users-datatable.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/E2E/tests/admin/Users-datatable.spec.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,11 +70,25 @@
       <workItem from="1774095619228" duration="3982000" />
       <workItem from="1774170141686" duration="1070000" />
       <workItem from="1775369045579" duration="2573000" />
-      <workItem from="1775455328592" duration="1803000" />
+      <workItem from="1775455328592" duration="6100000" />
+      <workItem from="1775506555292" duration="3603000" />
     </task>
+    <task id="LOCAL-00001" summary="Refactor, and move pages to its own folders">
+      <option name="closed" value="true" />
+      <created>1775457575802</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1775457575802</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Refactor, and move pages to its own folders" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor, and move pages to its own folders" />
   </component>
 </project>
