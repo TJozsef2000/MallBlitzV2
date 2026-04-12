@@ -1,5 +1,11 @@
 {
   "permissions": {
-    "allow": ["Bash(*)"]
+    "allow": [
+      "Bash(*)",
+      "mcp__playwright__browser_navigate"
+    ]
+  },
+  "enabledPlugins": {
+    "codex@openai-codex": true
   }
 }

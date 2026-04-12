@@ -1,4 +1,5 @@
 import { expect, Locator, Page } from "@playwright/test";
+import { AdminConfirmationModalComponent } from "../Components/AdminConfirmationModalComponent";
 import { AdminDataTableComponent } from "../Components/AdminDataTableComponent";
 import { BasePage } from "../../BasePage";
 
@@ -11,19 +12,21 @@ interface BrandRowExpectations {
 
 export class BrandsPage extends BasePage {
 	readonly table: AdminDataTableComponent;
+	private readonly deleteConfirmationModal: AdminConfirmationModalComponent;
 
 	protected readonly addBrandButton: Locator;
-	protected readonly deleteButton: Locator;
 
 	constructor(protected readonly page: Page) {
 		super(page);
 
 		this.addBrandButton = this.page.getByRole("button", { name: "Add Brand" });
-		this.deleteButton = this.page.getByRole("button", { name: "Delete" });
+		this.deleteConfirmationModal = new AdminConfirmationModalComponent(this.page, {
+			heading: /^Delete$/,
+		});
 		const tableSearchInput = this.page.getByRole("textbox", {
 			name: "Search brands by name or description...",
 		});
-		const tableRoot = this.page.locator("fieldset").filter({ has: tableSearchInput }).first();
+		const tableRoot = this.page.locator("fieldset").first();
 		this.table = new AdminDataTableComponent(this.page, tableRoot, {
 			columns: [
 				{
@@ -126,9 +129,8 @@ export class BrandsPage extends BasePage {
 			return false;
 		}
 
-		this.page.once("dialog", (dialog) => dialog.accept());
-		await this.table.openRowActions("Brand Name", name);
-		await this.deleteButton.click();
+		await this.table.clickRowAction("Brand Name", name, "Delete");
+		await this.deleteConfirmationModal.confirm();
 		await expect
 			.poll(async () => {
 				try {
