@@ -47,7 +47,7 @@ async function main(): Promise<void> {
         return arg?.split('=')[1] ?? defaultValue;
     };
 
-    const baseUrl = process.env.CRAWLER_BASE_URL ?? 'https://yourwebsite.com';
+    const baseUrl = process.env.CRAWLER_BASE_URL ?? 'https://mallblitz.com';
 
     const startUrl = getArg('url', baseUrl);
     const maxPages = parseMaxPages(getArg('max-pages', '150'));
